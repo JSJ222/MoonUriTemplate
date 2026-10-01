@@ -43,6 +43,8 @@ let values : Array[(String, @uri_template.Value)] = [
 
 对固定 SDK 操作，`Template::expand_required` 可要求每个变量均有绑定，并可拒绝未使用参数；普通 `expand` 仍遵循 RFC 6570 的未定义变量省略语义。`Template::variable_profiles` 提供每个变量的标量限制、修饰符和使用次数，`Template::check_policy` 可预检保留字符、片段、特性级别及重复引用。`Template::expand_detailed` 返回每个源段对应的输出位置，供编辑器和诊断工具定位。已有 JSON 树可直接交给 `Template::expand_json`。
 
+`Template::measure` 在不构造最终 URI 的前提下计算精确输出长度，并应用与 `expand` 相同的输入和输出限额。该操作仍会分配 UTF-8 输入字节数组，适用于生成大量链接前的容量预检。`BoundTemplate::measure` 与 `TemplateCatalog::measure` 对应部分绑定和命名模板。`Template::diff_contract` 只报告变量及运算符的静态变化，不证明两版模板生成的 URI 相同。
+
 ## 语义与边界
 
 - 默认解析模式按 RFC 6570 字面量语法检查 Unicode、括号、变量名和修饰符。公开测试集中有一条包含模板外单引号的历史样例，与规范的字面量 ABNF 不一致；`strict_literals=false` 仅为这类兼容输入开放。

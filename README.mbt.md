@@ -6,6 +6,8 @@ Compile a template once, then expand it with typed scalar, list, or ordered asso
 
 Reusable catalogs, partial bindings, batch rendering, source-to-output spans, variable profiles, and opt-in template policies support SDK generators and hypermedia services. Every API returns typed errors; network destination validation remains the caller's responsibility.
 
+`Template::measure` computes the exact expanded length without assembling the URI, and the positive conformance fixtures check that measurement agrees with rendering. `Template::diff_contract` reports selected static changes for API reviews; it does not prove URI equivalence.
+
 Run from a source checkout:
 
 ```sh
