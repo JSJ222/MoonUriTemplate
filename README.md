@@ -57,4 +57,6 @@ let values : Array[(String, @uri_template.Value)] = [
 
 测试包含 [uri-templates/uritemplate-test](https://github.com/uri-templates/uritemplate-test) 固定提交中的 270 条用例，并保留其 Apache-2.0 许可证。测试代码由 [生成脚本](tools/generate_conformance.py) 从 JSON 向量生成；生成代码不计入手写源码规模。另有解析错误、Unicode、资源限制、JSON 桥接和静态分析测试。详见 [符合性说明](docs/conformance.md) 和 [第三方材料](THIRD_PARTY.md)。
 
+`moon run benchmarks/main --target native --release` 可执行固定的 20,000 次展开工作量；本机基线和复现条件见 [性能记录](docs/performance.md)。
+
 项目采用 Apache-2.0 许可证，见 [LICENSE](LICENSE)。[选题与竞品核查](docs/topic-research.md) 记录了 2026-10-01 的调查；Mooncakes 目录会变化，申报及发布前应实时复查。
