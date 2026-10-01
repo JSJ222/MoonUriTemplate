@@ -20,6 +20,10 @@ _Avoid_: parameter definition
 A scalar, list, or associative value supplied for a variable at expansion time.
 _Avoid_: route parameter
 
+**Binding**:
+An association between one template variable name and one expansion value.
+_Avoid_: argument
+
 **Undefined variable**:
 A variable absent from the supplied value set; it contributes no text to its expression.
 _Avoid_: empty variable
