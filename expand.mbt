@@ -56,7 +56,11 @@ fn Template::expand_internal(
       Expression(_, _, start, end) => (start, end, true)
     }
     let text = match segment {
-      Literal(raw) => encode_literal(raw)
+      Literal(raw) =>
+        match encode_literal_limited(raw, max_output - used) {
+          Ok(value) => value
+          Err(error) => return Err(error)
+        }
       Expression(op, specs, _, _) =>
         match expand_expression(op, specs, values, max_output - used) {
           Ok(text) => text
@@ -320,7 +324,11 @@ fn expand_variable(
         None => raw
         Some(length) => scalar_prefix(raw, length)
       }
-      let piece = named_piece(op, spec.name, encode_value(selected, reserved))
+      let encoded = match encode_value_limited(selected, reserved, limit) {
+        Ok(value) => value
+        Err(error) => return Err(error)
+      }
+      let piece = named_piece(op, spec.name, encoded)
       if piece.length() > limit {
         Err(OutputTooLong)
       } else {
@@ -337,10 +345,11 @@ fn expand_variable(
       if spec.explode {
         let pieces = PieceBuffer::new(operator_separator(op), limit)
         for item in items {
-          match
-            pieces.push(
-              named_piece(op, spec.name, encode_value(item, reserved)),
-            ) {
+          let encoded = match encode_value_limited(item, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
+          match pieces.push(named_piece(op, spec.name, encoded)) {
             Ok(_) => ()
             Err(error) => return Err(error)
           }
@@ -349,7 +358,11 @@ fn expand_variable(
       } else {
         let encoded = PieceBuffer::new(",", limit)
         for item in items {
-          match encoded.push(encode_value(item, reserved)) {
+          let value = match encode_value_limited(item, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
+          match encoded.push(value) {
             Ok(_) => ()
             Err(error) => return Err(error)
           }
@@ -373,8 +386,14 @@ fn expand_variable(
         let pieces = PieceBuffer::new(operator_separator(op), limit)
         for entry in entries {
           let (name, item) = entry
-          let key = encode_value(name, reserved)
-          let encoded = encode_value(item, reserved)
+          let key = match encode_value_limited(name, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
+          let encoded = match encode_value_limited(item, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
           let piece = if encoded == "" && !operator_form(op) {
             key
           } else {
@@ -390,11 +409,19 @@ fn expand_variable(
         let encoded = PieceBuffer::new(",", limit)
         for entry in entries {
           let (name, item) = entry
-          match encoded.push(encode_value(name, reserved)) {
+          let key = match encode_value_limited(name, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
+          match encoded.push(key) {
             Ok(_) => ()
             Err(error) => return Err(error)
           }
-          match encoded.push(encode_value(item, reserved)) {
+          let value = match encode_value_limited(item, reserved, limit) {
+            Ok(value) => value
+            Err(error) => return Err(error)
+          }
+          match encoded.push(value) {
             Ok(_) => ()
             Err(error) => return Err(error)
           }

@@ -17,46 +17,81 @@ fn pct_byte(out : StringBuilder, value : Int) -> Unit {
 ///|
 /// Encode a value as RFC 3986 percent-encoded UTF-8. Reserved expansion keeps
 /// reserved ASCII characters and already-valid percent triplets.
-fn encode_value(input : String, allow_reserved : Bool) -> String {
+fn encode_value_limited(
+  input : String,
+  allow_reserved : Bool,
+  limit : Int,
+) -> Result[String, ExpandError] {
+  if limit < 0 {
+    return Err(OutputTooLong)
+  }
   let bytes = @utf8.encode(input)
   let out = StringBuilder()
   let mut i = 0
+  let mut used = 0
   while i < bytes.length() {
     let code = bytes[i].to_int()
     if is_unreserved(code) || (allow_reserved && is_reserved(code)) {
+      if used >= limit {
+        return Err(OutputTooLong)
+      }
       out.write_char(code.unsafe_to_char())
+      used += 1
     } else if allow_reserved &&
       code == 37 &&
       i + 2 < bytes.length() &&
       is_hex(bytes[i + 1].to_int()) &&
       is_hex(bytes[i + 2].to_int()) {
+      if used > limit - 3 {
+        return Err(OutputTooLong)
+      }
       out.write_char('%')
       out.write_char(bytes[i + 1].to_int().unsafe_to_char())
       out.write_char(bytes[i + 2].to_int().unsafe_to_char())
+      used += 3
       i += 2
     } else {
+      if used > limit - 3 {
+        return Err(OutputTooLong)
+      }
       pct_byte(out, code)
+      used += 3
     }
     i += 1
   }
-  out.to_string()
+  Ok(out.to_string())
 }
 
 ///|
 /// Literals preserve URI punctuation and existing percent triplets. The
 /// parser has already rejected malformed triplets and unpaired surrogates.
-fn encode_literal(input : String) -> String {
+fn encode_literal_limited(
+  input : String,
+  limit : Int,
+) -> Result[String, ExpandError] {
+  if limit < 0 {
+    return Err(OutputTooLong)
+  }
   let bytes = @utf8.encode(input)
   let out = StringBuilder()
+  let mut used = 0
   for byte in bytes {
     let code = byte.to_int()
     if is_unreserved(code) || is_reserved(code) || code == 37 {
+      if used >= limit {
+        return Err(OutputTooLong)
+      }
       out.write_char(code.unsafe_to_char())
+      used += 1
     } else {
+      if used > limit - 3 {
+        return Err(OutputTooLong)
+      }
       pct_byte(out, code)
+      used += 3
     }
   }
-  out.to_string()
+  Ok(out.to_string())
 }
 
 ///|
