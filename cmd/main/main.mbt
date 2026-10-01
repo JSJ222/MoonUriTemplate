@@ -1,7 +1,11 @@
 ///|
-/// Entry point for the CLI or runnable program in this template.
-/// Keep main focused; move logic into the library package.
-/// Run with `moon run cmd/main` from the project root.
+/// Entry point for a minimal executable example.
 fn main {
-  println("Hello")
+  match @uri_template.expand("https://example.test/search{?q,page}", [
+    ("q", Scalar("MoonBit URI Templates")),
+    ("page", Scalar("1")),
+  ]) {
+    Ok(uri) => println(uri)
+    Err(_) => println("template expansion failed")
+  }
 }
