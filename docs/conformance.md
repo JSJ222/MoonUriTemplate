@@ -1,0 +1,9 @@
+# RFC 6570 conformance record
+
+The project uses [uri-templates/uritemplate-test](https://github.com/uri-templates/uritemplate-test) at commit `4171dac22aa67fc710b3f6df308a50bd08552986`. The checked-in JSON files contain 64 overview examples, 117 examples by RFC section, 53 extended examples, and 36 negative cases: 270 total. The Apache-2.0 license is checked in alongside them. `tools/generate_conformance.py` emits portable MoonBit tests; run `python tools/generate_conformance.py && moon fmt && git diff --exit-code` to verify drift.
+
+All 270 fixture cases currently pass on each of wasm, wasm-gc, js, and native. The MoonBit test runner reports groups as tests rather than each fixture case separately. Additional handwritten tests cover invalid grammar, source spans, empty and undefined values, multibyte prefixes, resource budgets, JSON bridge behavior, and binding preflight.
+
+The upstream overview fixture includes `'{var}'`, where apostrophes are outside the expression. RFC 6570 §2.1 excludes literal apostrophes, so the default parser rejects this spelling. The conformance generator runs positive fixtures with `strict_literals=false` to preserve that historical test case. All other parser checks remain active. Negative fixtures run with the strict default. This compatibility behavior is not a claim that the apostrophe spelling is valid under the RFC ABNF.
+
+The fixture's JSON numbers are converted to their decimal text representation by the test generator before binding; the public JSON bridge deliberately does not coerce numbers. Associative fixture expectations list every allowed key order. Our typed API preserves caller order, and the generated tests accept the corresponding permitted output.

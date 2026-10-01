@@ -1,9 +1,18 @@
 # MoonURITemplate
 
-Pure MoonBit implementation of RFC 6570 Level 4 URI Template parsing and expansion.
+Pure MoonBit RFC 6570 Level 4 URI Template parser and expander for wasm, wasm-gc, JavaScript, and native targets.
 
-This project is in active development. The public API and conformance status will be documented here as each feature lands.
+Compile a template once, then expand it with typed scalar, list, or ordered associative values. The library supports all eight defined operators, prefix and explode modifiers, UTF-8 percent encoding, sparse composites, bounded processing, source-aware analysis, binding preflight, and a conservative JSON bridge.
 
-The library expands scalar, list, and associative values into URI references. It does not fetch URLs, parse URI references, or reverse-match templates.
+Run from a source checkout:
 
-See [topic research](docs/topic-research.md) for the ecosystem comparison and [RFC 6570](https://www.rfc-editor.org/rfc/rfc6570) for the specification.
+```sh
+moon check --target all --deny-warn
+moon build --target all --deny-warn
+moon test --target all --deny-warn
+moon run examples/api --target wasm-gc
+```
+
+`moon run examples/mcp --target wasm-gc` and `moon run examples/hypermedia --target wasm-gc` demonstrate two further uses. The [main README](README.md) documents the API, security boundaries, and conformance scope.
+
+The runtime implementation is original. Apache-2.0 test fixtures from [uri-templates/uritemplate-test](https://github.com/uri-templates/uritemplate-test) are pinned and attributed in [THIRD_PARTY.md](THIRD_PARTY.md). The project itself is Apache-2.0 licensed.
