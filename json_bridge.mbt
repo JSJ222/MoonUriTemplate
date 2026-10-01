@@ -68,7 +68,7 @@ pub fn value_from_json(
       for name, _ in fields {
         names.push(name)
       }
-      names.sort()
+      names.sort_by(fn(a, b) { a.lexical_compare(b) })
       let converted : Array[(String, String?)] = []
       for name in names {
         match fields.get(name) {
@@ -98,7 +98,7 @@ pub fn bindings_from_json(
   for name, _ in fields {
     names.push(name)
   }
-  names.sort()
+  names.sort_by(fn(a, b) { a.lexical_compare(b) })
   let bindings : Array[(String, Value)] = []
   for name in names {
     match fields.get(name) {

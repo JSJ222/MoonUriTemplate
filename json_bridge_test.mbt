@@ -51,3 +51,15 @@ test "JSON bridge distinguishes absent null from empty string" {
   }
   assert_eq(output, "?y=")
 }
+
+///|
+test "JSON bridge uses lexical key order across different lengths" {
+  let input : Json = { "user": "u", "health": "h" }
+  let bindings = match @moonuritemplate.bindings_from_json(input) {
+    Ok(value) => value
+    Err(_) => fail("convert")
+  }
+  assert_eq(bindings.length(), 2)
+  assert_eq(bindings[0].0, "health")
+  assert_eq(bindings[1].0, "user")
+}
