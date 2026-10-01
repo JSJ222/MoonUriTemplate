@@ -130,9 +130,15 @@ pub fn Template::analyze(self : Template) -> TemplateAnalysis {
 /// Count how often a variable occurs in this template.
 pub fn Template::reference_count(self : Template, name : String) -> Int {
   let mut count = 0
-  for use_ in self.analyze().uses {
-    if use_.name == name {
-      count += 1
+  for segment in self.segments {
+    match segment {
+      Literal(_) => ()
+      Expression(_, specs, _, _) =>
+        for spec in specs {
+          if spec.name == name {
+            count += 1
+          }
+        }
     }
   }
   count

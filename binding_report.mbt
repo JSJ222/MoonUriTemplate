@@ -64,13 +64,13 @@ pub fn Template::inspect_bindings(
   for name in self.variables {
     required[name] = true
   }
-  let supplied : Map[String, Bool] = Map([])
+  let supplied : Map[String, Value] = Map([])
   for binding in bindings {
-    let (name, _) = binding
+    let (name, value) = binding
     if supplied.contains(name) {
       issues.push(Duplicate(name))
     } else {
-      supplied[name] = true
+      supplied[name] = value
       if !required.contains(name) {
         issues.push(Unused(name))
       }
@@ -88,17 +88,11 @@ pub fn Template::inspect_bindings(
       Expression(_, specs, _, _) =>
         for spec in specs {
           if spec.prefix is Some(_) && !reported.contains(spec.name) {
-            for binding in bindings {
-              let (name, value) = binding
-              if name == spec.name {
-                match value {
-                  Scalar(_) => ()
-                  _ => {
-                    issues.push(CompositePrefix(name))
-                    reported[name] = true
-                  }
-                }
-                break
+            match supplied.get(spec.name) {
+              Some(Scalar(_)) | None => ()
+              Some(_) => {
+                issues.push(CompositePrefix(spec.name))
+                reported[spec.name] = true
               }
             }
           }
