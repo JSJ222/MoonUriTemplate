@@ -1,0 +1,338 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "oyjh0381/moonuritemplate"
+
+// Values
+pub fn bindings_from_json(Json) -> Result[Array[(String, Value)], JsonBridgeError]
+
+pub fn compile_catalog(Array[(String, String)], max_templates? : Int, max_template_length? : Int) -> Result[TemplateCatalog, CatalogError]
+
+pub fn expand(String, Array[(String, Value)], max_output? : Int) -> Result[String, TemplateError]
+
+pub fn expand_json(String, Json, max_output? : Int) -> Result[String, JsonTemplateError]
+
+pub fn parse(String, max_length? : Int, max_expressions? : Int, max_variables? : Int, strict_literals? : Bool) -> Result[Template, ParseError]
+
+pub fn permissive_policy() -> TemplatePolicy
+
+pub fn value_from_json(Json, path? : String) -> Result[Value?, JsonBridgeError]
+
+pub fn version() -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum BatchError {
+  TooManyInputs
+  TotalOutputTooLong
+  InvalidItem(Int, ExpandError)
+}
+pub fn BatchError::code(Self) -> String
+pub fn BatchError::index(Self) -> Int?
+
+pub(all) enum BindingIssue {
+  Missing(String)
+  Unused(String)
+  Duplicate(String)
+  CompositePrefix(String)
+}
+pub fn BindingIssue::code(Self) -> String
+pub fn BindingIssue::name(Self) -> String
+
+pub struct BindingReport {
+  issues : Array[BindingIssue]
+}
+pub fn BindingReport::is_clean(Self) -> Bool
+pub fn BindingReport::issues(Self) -> Array[BindingIssue]
+pub fn BindingReport::missing_count(Self) -> Int
+
+pub struct BoundTemplate {
+  template : Template
+  fixed : Array[(String, Value)]
+  fixed_names : Map[String, Bool]
+}
+pub fn BoundTemplate::expand(Self, Array[(String, Value)], max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[String, ExpandError]
+pub fn BoundTemplate::fixed_names(Self) -> Array[String]
+pub fn BoundTemplate::measure(Self, Array[(String, Value)], max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[Int, ExpandError]
+
+pub struct CatalogAudit {
+  entries : Array[CatalogEntryAudit]
+  total_findings : Int
+}
+pub fn CatalogAudit::entries(Self) -> Array[CatalogEntryAudit]
+pub fn CatalogAudit::is_clean(Self) -> Bool
+pub fn CatalogAudit::total_findings(Self) -> Int
+
+pub(all) enum CatalogBatchError {
+  TooManyRequests
+  TotalOutputTooLong
+  InvalidRequest(Int, CatalogExpandError)
+}
+pub fn CatalogBatchError::code(Self) -> String
+pub fn CatalogBatchError::index(Self) -> Int?
+
+pub struct CatalogEntryAudit {
+  name : String
+  variable_count : Int
+  expression_count : Int
+  max_level : Int
+  findings : Array[PolicyFinding]
+}
+pub fn CatalogEntryAudit::expression_count(Self) -> Int
+pub fn CatalogEntryAudit::findings(Self) -> Array[PolicyFinding]
+pub fn CatalogEntryAudit::max_level(Self) -> Int
+pub fn CatalogEntryAudit::name(Self) -> String
+pub fn CatalogEntryAudit::variable_count(Self) -> Int
+
+pub(all) enum CatalogError {
+  TooManyTemplates
+  EmptyName
+  DuplicateName(String)
+  InvalidTemplate(String, ParseError)
+}
+pub fn CatalogError::code(Self) -> String
+pub fn CatalogError::name(Self) -> String?
+pub fn CatalogError::parse_error(Self) -> ParseError?
+
+pub(all) enum CatalogExpandError {
+  UnknownTemplate(String)
+  InvalidBinding(String, ExpandError)
+}
+pub fn CatalogExpandError::code(Self) -> String
+pub fn CatalogExpandError::expand_error(Self) -> ExpandError?
+pub fn CatalogExpandError::name(Self) -> String
+
+pub(all) struct CatalogRequest {
+  name : String
+  bindings : Array[(String, Value)]
+}
+
+pub(all) enum ExpandError {
+  DuplicateVariable(String)
+  MissingVariable(String)
+  UnusedVariable(String)
+  InvalidValue(String)
+  TooManyBindings
+  ValueTooLong(String)
+  TooManyItems(String)
+  InvalidLimit(String)
+  OutputTooLong
+}
+pub fn ExpandError::code(Self) -> String
+pub fn ExpandError::message(Self) -> String
+
+pub(all) struct ExpressionInfo {
+  start : Int
+  end : Int
+  operator : String
+  level : Int
+  variable_count : Int
+  permits_reserved : Bool
+}
+
+pub(all) enum JsonBridgeError {
+  RootMustBeObject
+  UnsupportedValue(String)
+}
+pub fn JsonBridgeError::code(Self) -> String
+pub fn JsonBridgeError::path(Self) -> String
+
+pub(all) enum JsonRenderError {
+  Conversion(JsonBridgeError)
+  Expansion(ExpandError)
+}
+pub fn JsonRenderError::code(Self) -> String
+
+pub(all) enum JsonTemplateError {
+  TemplateParse(ParseError)
+  TemplateRender(JsonRenderError)
+}
+pub fn JsonTemplateError::code(Self) -> String
+
+pub enum Operator {
+  Simple
+  Reserved
+  Fragment
+  Label
+  Path
+  PathParameter
+  Query
+  QueryContinuation
+}
+
+pub(all) struct OutputSpan {
+  source_start : Int
+  source_end : Int
+  output_start : Int
+  output_end : Int
+  is_expression : Bool
+}
+
+pub(all) enum ParseError {
+  InputTooLong
+  InvalidUnicode(Int)
+  InvalidLiteral(Int)
+  UnclosedExpression(Int)
+  NestedExpression(Int)
+  EmptyExpression(Int)
+  InvalidOperator(Int)
+  InvalidVariable(Int)
+  InvalidModifier(Int)
+  TooManyExpressions
+  TooManyVariables
+}
+pub fn ParseError::code(Self) -> String
+pub fn ParseError::message(Self) -> String
+pub fn ParseError::offset(Self) -> Int?
+
+pub(all) enum PolicyError {
+  InvalidFeatureLevel
+  InvalidReferenceLimit
+}
+pub fn PolicyError::code(Self) -> String
+
+pub(all) struct PolicyFinding {
+  kind : PolicyFindingKind
+  start : Int
+  end : Int
+}
+
+pub(all) enum PolicyFindingKind {
+  ReservedExpansion
+  FragmentExpansion
+  FeatureLevelExceeded(Int)
+  ReferenceLimitExceeded
+  RepeatedVariable(String)
+}
+pub fn PolicyFindingKind::code(Self) -> String
+
+pub struct RenderedUri {
+  text : String
+  spans : Array[OutputSpan]
+}
+pub fn RenderedUri::spans(Self) -> Array[OutputSpan]
+pub fn RenderedUri::text(Self) -> String
+
+pub enum Segment {
+  Literal(String)
+  Expression(Operator, Array[VarSpec], Int, Int)
+}
+
+pub struct Template {
+  source : String
+  segments : Array[Segment]
+  variables : Array[String]
+}
+pub fn Template::analyze(Self) -> TemplateAnalysis
+pub fn Template::bind(Self, Array[(String, Value)], max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[BoundTemplate, ExpandError]
+pub fn Template::check_policy(Self, TemplatePolicy) -> Result[Array[PolicyFinding], PolicyError]
+pub fn Template::composite_capable_variables(Self) -> Array[String]
+pub fn Template::diff_contract(Self, Self) -> TemplateDiff
+pub fn Template::expand(Self, Array[(String, Value)], max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[String, ExpandError]
+pub fn Template::expand_detailed(Self, Array[(String, Value)], max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[RenderedUri, ExpandError]
+pub fn Template::expand_json(Self, Json, max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[String, JsonRenderError]
+pub fn Template::expand_many(Self, Array[Array[(String, Value)]], max_inputs? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Array[String], BatchError]
+pub fn Template::expand_required(Self, Array[(String, Value)], reject_unused? : Bool, max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[String, ExpandError]
+pub fn Template::inspect_bindings(Self, Array[(String, Value)]) -> BindingReport
+pub fn Template::measure(Self, Array[(String, Value)], max_output? : Int, max_bindings? : Int, max_value_length? : Int, max_items? : Int) -> Result[Int, ExpandError]
+pub fn Template::reference_count(Self, String) -> Int
+pub fn Template::source(Self) -> String
+pub fn Template::variable_profiles(Self) -> Array[VariableProfile]
+pub fn Template::variables(Self) -> Array[String]
+
+pub struct TemplateAnalysis {
+  expressions : Array[ExpressionInfo]
+  uses : Array[VariableUse]
+  max_level : Int
+  has_reserved_expansion : Bool
+}
+pub fn TemplateAnalysis::expressions(Self) -> Array[ExpressionInfo]
+pub fn TemplateAnalysis::has_reserved_expansion(Self) -> Bool
+pub fn TemplateAnalysis::max_level(Self) -> Int
+pub fn TemplateAnalysis::uses(Self) -> Array[VariableUse]
+
+pub struct TemplateCatalog {
+  names : Array[String]
+  templates : Map[String, Template]
+}
+pub fn TemplateCatalog::audit(Self, TemplatePolicy) -> Result[CatalogAudit, PolicyError]
+pub fn TemplateCatalog::contains(Self, String) -> Bool
+pub fn TemplateCatalog::expand(Self, String, Array[(String, Value)], max_output? : Int) -> Result[String, CatalogExpandError]
+pub fn TemplateCatalog::expand_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Array[String], CatalogBatchError]
+pub fn TemplateCatalog::get(Self, String) -> Template?
+pub fn TemplateCatalog::measure(Self, String, Array[(String, Value)], max_output? : Int) -> Result[Int, CatalogExpandError]
+pub fn TemplateCatalog::names(Self) -> Array[String]
+
+pub struct TemplateDiff {
+  added_variables : Array[String]
+  removed_variables : Array[String]
+  became_scalar_only : Array[String]
+  new_repeated_variables : Array[String]
+  old_level : Int
+  new_level : Int
+  reserved_added : Bool
+  fragment_added : Bool
+}
+pub fn TemplateDiff::added_variables(Self) -> Array[String]
+pub fn TemplateDiff::became_scalar_only(Self) -> Array[String]
+pub fn TemplateDiff::fragment_added(Self) -> Bool
+pub fn TemplateDiff::has_flagged_changes(Self) -> Bool
+pub fn TemplateDiff::new_level(Self) -> Int
+pub fn TemplateDiff::new_repeated_variables(Self) -> Array[String]
+pub fn TemplateDiff::old_level(Self) -> Int
+pub fn TemplateDiff::removed_variables(Self) -> Array[String]
+pub fn TemplateDiff::reserved_added(Self) -> Bool
+
+pub(all) enum TemplateError {
+  Parse(ParseError)
+  Expand(ExpandError)
+}
+
+pub(all) struct TemplatePolicy {
+  allow_reserved : Bool
+  allow_fragment : Bool
+  max_level : Int
+  max_references : Int
+  forbid_repeated_variables : Bool
+}
+
+pub(all) enum Value {
+  Scalar(String)
+  List(Array[String])
+  Assoc(Array[(String, String)])
+  SparseList(Array[String?])
+  SparseAssoc(Array[(String, String?)])
+}
+
+pub struct VarSpec {
+  name : String
+  prefix : Int?
+  explode : Bool
+  start : Int
+  end : Int
+}
+
+pub(all) struct VariableProfile {
+  name : String
+  occurrences : Int
+  first_start : Int
+  last_end : Int
+  scalar_only : Bool
+  uses_explode : Bool
+  uses_reserved : Bool
+  uses_query : Bool
+  maximum_prefix : Int?
+}
+
+pub(all) struct VariableUse {
+  name : String
+  start : Int
+  end : Int
+  expression_index : Int
+  operator : String
+  prefix : Int?
+  explode : Bool
+}
+
+// Type aliases
+
+// Traits
