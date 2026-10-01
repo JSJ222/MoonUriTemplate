@@ -11,6 +11,12 @@ pub fn parse(
   if max_length < 0 || input.length() > max_length {
     return Err(InputTooLong)
   }
+  if max_expressions < 0 {
+    return Err(TooManyExpressions)
+  }
+  if max_variables < 0 {
+    return Err(TooManyVariables)
+  }
   match first_invalid_utf16(input) {
     Some(at) => return Err(InvalidUnicode(at))
     None => ()
