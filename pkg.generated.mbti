@@ -6,6 +6,8 @@ pub fn bindings_from_json(Json) -> Result[Array[(String, Value)], JsonBridgeErro
 
 pub fn compile_catalog(Array[(String, String)], max_templates? : Int, max_template_length? : Int) -> Result[TemplateCatalog, CatalogError]
 
+pub fn compile_catalog_json(Json, max_templates? : Int, max_template_length? : Int) -> Result[TemplateCatalog, CatalogJsonError]
+
 pub fn expand(String, Array[(String, Value)], max_output? : Int) -> Result[String, TemplateError]
 
 pub fn expand_json(String, Json, max_output? : Int) -> Result[String, JsonTemplateError]
@@ -100,6 +102,20 @@ pub(all) enum CatalogExpandError {
 pub fn CatalogExpandError::code(Self) -> String
 pub fn CatalogExpandError::expand_error(Self) -> ExpandError?
 pub fn CatalogExpandError::name(Self) -> String
+
+pub(all) enum CatalogJsonError {
+  RootMustBeObject
+  TemplateMustBeString(String)
+  Compilation(CatalogError)
+}
+pub fn CatalogJsonError::code(Self) -> String
+pub fn CatalogJsonError::path(Self) -> String
+
+pub(all) enum CatalogJsonRenderError {
+  BindingConversion(JsonBridgeError)
+  CatalogExpansion(CatalogExpandError)
+}
+pub fn CatalogJsonRenderError::code(Self) -> String
 
 pub(all) struct CatalogRequest {
   name : String
@@ -257,6 +273,7 @@ pub struct TemplateCatalog {
 pub fn TemplateCatalog::audit(Self, TemplatePolicy) -> Result[CatalogAudit, PolicyError]
 pub fn TemplateCatalog::contains(Self, String) -> Bool
 pub fn TemplateCatalog::expand(Self, String, Array[(String, Value)], max_output? : Int) -> Result[String, CatalogExpandError]
+pub fn TemplateCatalog::expand_json(Self, String, Json, max_output? : Int) -> Result[String, CatalogJsonRenderError]
 pub fn TemplateCatalog::expand_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Array[String], CatalogBatchError]
 pub fn TemplateCatalog::get(Self, String) -> Template?
 pub fn TemplateCatalog::measure(Self, String, Array[(String, Value)], max_output? : Int) -> Result[Int, CatalogExpandError]
