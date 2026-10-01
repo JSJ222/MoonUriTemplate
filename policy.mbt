@@ -36,6 +36,17 @@ pub fn PolicyError::code(self : PolicyError) -> String {
 }
 
 ///|
+fn TemplatePolicy::validate(self : TemplatePolicy) -> Result[Unit, PolicyError] {
+  if self.max_level < 1 || self.max_level > 4 {
+    return Err(InvalidFeatureLevel)
+  }
+  if self.max_references < 0 {
+    return Err(InvalidReferenceLimit)
+  }
+  Ok(())
+}
+
+///|
 pub(all) enum PolicyFindingKind {
   ReservedExpansion
   FragmentExpansion
@@ -70,11 +81,9 @@ pub fn Template::check_policy(
   self : Template,
   policy : TemplatePolicy,
 ) -> Result[Array[PolicyFinding], PolicyError] {
-  if policy.max_level < 1 || policy.max_level > 4 {
-    return Err(InvalidFeatureLevel)
-  }
-  if policy.max_references < 0 {
-    return Err(InvalidReferenceLimit)
+  match policy.validate() {
+    Ok(_) => ()
+    Err(error) => return Err(error)
   }
   let analysis = self.analyze()
   let findings : Array[PolicyFinding] = []
