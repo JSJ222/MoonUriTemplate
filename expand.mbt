@@ -9,6 +9,25 @@ pub fn Template::expand(
   max_value_length? : Int = 1048576,
   max_items? : Int = 4096,
 ) -> Result[String, ExpandError] {
+  match
+    self.expand_internal(
+      bindings, max_output, max_bindings, max_value_length, max_items, false,
+    ) {
+    Ok(result) => Ok(result.text)
+    Err(error) => Err(error)
+  }
+}
+
+///|
+fn Template::expand_internal(
+  self : Template,
+  bindings : Array[(String, Value)],
+  max_output : Int,
+  max_bindings : Int,
+  max_value_length : Int,
+  max_items : Int,
+  collect_spans : Bool,
+) -> Result[RenderedUri, ExpandError] {
   if max_output < 0 {
     return Err(OutputTooLong)
   }
@@ -28,8 +47,14 @@ pub fn Template::expand(
     values[name] = value
   }
   let out = StringBuilder()
+  let spans : Array[OutputSpan] = []
   let mut used = 0
+  let mut source_cursor = 0
   for segment in self.segments {
+    let (source_start, source_end, expression) = match segment {
+      Literal(raw) => (source_cursor, source_cursor + raw.length(), false)
+      Expression(_, _, start, end) => (start, end, true)
+    }
     let text = match segment {
       Literal(raw) => encode_literal(raw)
       Expression(op, specs, _, _) =>
@@ -42,9 +67,19 @@ pub fn Template::expand(
       return Err(OutputTooLong)
     }
     out.write_string(text)
+    if collect_spans {
+      spans.push({
+        source_start,
+        source_end,
+        output_start: used,
+        output_end: used + text.length(),
+        is_expression: expression,
+      })
+    }
     used += text.length()
+    source_cursor = source_end
   }
-  Ok(out.to_string())
+  Ok({ text: out.to_string(), spans, })
 }
 
 ///|
