@@ -37,20 +37,10 @@ fn Template::expand_internal(
   if max_items < 0 {
     return Err(InvalidLimit("max_items"))
   }
-  if max_bindings < 0 || bindings.length() > max_bindings {
-    return Err(TooManyBindings)
-  }
-  let values : Map[String, Value] = Map([])
-  for binding in bindings {
-    let (name, value) = binding
-    if values.contains(name) {
-      return Err(DuplicateVariable(name))
-    }
-    match check_value(value, name, max_value_length, max_items) {
-      Ok(_) => ()
-      Err(error) => return Err(error)
-    }
-    values[name] = value
+  let values = match
+    prepare_bindings(bindings, max_bindings, max_value_length, max_items) {
+    Ok(value) => value
+    Err(error) => return Err(error)
   }
   let out = StringBuilder()
   let spans : Array[OutputSpan] = []
@@ -90,6 +80,31 @@ fn Template::expand_internal(
     source_cursor = source_end
   }
   Ok({ text: out.to_string(), spans, })
+}
+
+///|
+fn prepare_bindings(
+  bindings : Array[(String, Value)],
+  max_bindings : Int,
+  max_value_length : Int,
+  max_items : Int,
+) -> Result[Map[String, Value], ExpandError] {
+  if max_bindings < 0 || bindings.length() > max_bindings {
+    return Err(TooManyBindings)
+  }
+  let values : Map[String, Value] = Map([])
+  for binding in bindings {
+    let (name, value) = binding
+    if values.contains(name) {
+      return Err(DuplicateVariable(name))
+    }
+    match check_value(value, name, max_value_length, max_items) {
+      Ok(_) => ()
+      Err(error) => return Err(error)
+    }
+    values[name] = value
+  }
+  Ok(values)
 }
 
 ///|
