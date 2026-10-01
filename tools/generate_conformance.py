@@ -117,7 +117,7 @@ def generate() -> str:
                     "  ]",
                     "  for case in cases {",
                     "    let (source, alternatives) = case",
-                    "    let template = match @moonuritemplate.parse(source) {",
+                    "    let template = match @moonuritemplate.parse(source, strict_literals=false) {",
                     "      Ok(value) => value",
                     "      Err(_) => fail(\"cannot parse fixture: \" + source)",
                     "    }",

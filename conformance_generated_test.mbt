@@ -14,7 +14,7 @@ test "spec-examples.json: Level 1 Examples" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -43,7 +43,7 @@ test "spec-examples.json: Level 2 Examples" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -87,7 +87,7 @@ test "spec-examples.json: Level 3 Examples" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -155,7 +155,7 @@ test "spec-examples.json: Level 4 Examples" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -179,7 +179,7 @@ test "spec-examples-by-section.json: 2.1 Literals" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -226,7 +226,7 @@ test "spec-examples-by-section.json: 3.2.1 Variable Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -280,7 +280,7 @@ test "spec-examples-by-section.json: 3.2.2 Simple String Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -337,7 +337,7 @@ test "spec-examples-by-section.json: 3.2.3 Reserved Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -386,7 +386,7 @@ test "spec-examples-by-section.json: 3.2.4 Fragment Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -438,7 +438,7 @@ test "spec-examples-by-section.json: 3.2.5 Label Expansion with Dot-Prefix" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -490,7 +490,7 @@ test "spec-examples-by-section.json: 3.2.6 Path Segment Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -541,7 +541,7 @@ test "spec-examples-by-section.json: 3.2.7 Path-Style Parameter Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -589,7 +589,7 @@ test "spec-examples-by-section.json: 3.2.8 Form-Style Query Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -637,7 +637,7 @@ test "spec-examples-by-section.json: 3.2.9 Form-Style Query Continuation" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -693,7 +693,7 @@ test "extended-tests.json: Additional Examples 1" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -726,7 +726,7 @@ test "extended-tests.json: Additional Examples 2" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -756,7 +756,7 @@ test "extended-tests.json: Additional Examples 3: Empty Variables" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -786,7 +786,7 @@ test "extended-tests.json: Additional Examples 4: Numeric Keys" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -816,7 +816,7 @@ test "extended-tests.json: Additional Examples 5: Explode Combinations" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -854,7 +854,7 @@ test "extended-tests.json: Additional Examples 6: Reserved Expansion" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -888,7 +888,7 @@ test "extended-tests.json: Additional Examples 7: Prefix Modifiers with Multibyt
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }
@@ -914,7 +914,7 @@ test "extended-tests.json: Additional Examples 8: Literal Encoding" {
   ]
   for case in cases {
     let (source, alternatives) = case
-    let template = match @moonuritemplate.parse(source) {
+    let template = match @moonuritemplate.parse(source, strict_literals=false) {
       Ok(value) => value
       Err(_) => fail("cannot parse fixture: " + source)
     }

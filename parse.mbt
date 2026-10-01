@@ -6,6 +6,7 @@ pub fn parse(
   max_length? : Int = 65536,
   max_expressions? : Int = 1024,
   max_variables? : Int = 4096,
+  strict_literals? : Bool = true,
 ) -> Result[Template, ParseError] {
   if max_length < 0 || input.length() > max_length {
     return Err(InputTooLong)
@@ -66,7 +67,7 @@ pub fn parse(
     } else if unit == 125 {
       return Err(InvalidLiteral(i))
     } else {
-      match validate_literal_unit(input, i) {
+      match validate_literal_unit(input, i, strict_literals) {
         Ok(next) => i = next
         Err(error) => return Err(error)
       }
@@ -132,7 +133,22 @@ fn is_reserved(code : Int) -> Bool {
 }
 
 ///|
-fn validate_literal_unit(input : String, at : Int) -> Result[Int, ParseError] {
+fn allowed_unicode_literal(code : Int) -> Bool {
+  (code >= 0xA0 && code <= 0xD7FF) ||
+  (code >= 0xE000 && code <= 0xFDCF) ||
+  (code >= 0xFDF0 && code <= 0xFFEF) ||
+  (code >= 0x10000 && code <= 0xDFFFD && (code & 0xFFFF) <= 0xFFFD) ||
+  (code >= 0xE1000 && code <= 0xEFFFD && (code & 0xFFFF) <= 0xFFFD) ||
+  (code >= 0xF0000 && code <= 0xFFFFD) ||
+  (code >= 0x100000 && code <= 0x10FFFD)
+}
+
+///|
+fn validate_literal_unit(
+  input : String,
+  at : Int,
+  strict_literals : Bool,
+) -> Result[Int, ParseError] {
   let code = input[at].to_int()
   if code == 37 {
     if at + 2 < input.length() && is_hex(input[at + 1].to_int()) && is_hex(input[at + 2].to_int()) {
@@ -140,9 +156,14 @@ fn validate_literal_unit(input : String, at : Int) -> Result[Int, ParseError] {
     } else {
       Err(InvalidLiteral(at))
     }
-  } else if is_unreserved(code) || is_reserved(code) {
+  } else if is_unreserved(code) ||
+    (is_reserved(code) && (!strict_literals || code != 39)) {
     Ok(at + 1)
-  } else if code >= 128 && code != 0xFFFE && code != 0xFFFF {
+  } else if code >= 0xD800 && code <= 0xDBFF {
+    let low = input[at + 1].to_int()
+    let scalar = 0x10000 + ((code - 0xD800) << 10) + low - 0xDC00
+    if allowed_unicode_literal(scalar) { Ok(at + 2) } else { Err(InvalidLiteral(at)) }
+  } else if allowed_unicode_literal(code) {
     Ok(at + 1)
   } else {
     Err(InvalidLiteral(at))

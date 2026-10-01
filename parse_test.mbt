@@ -34,10 +34,16 @@ test "template parser rejects malformed names and modifiers" {
 
 ///|
 test "template parser rejects malformed literals" {
-  let cases = ["a%", "a%G0", "a b", "a\n", "a|b", "a\\b"]
+  let cases = ["a%", "a%G0", "a b", "a\n", "a|b", "a\\b", "a'b", "a\u{80}b", "a\u{FDD0}b"]
   for case in cases {
     assert_true(@moonuritemplate.parse(case) is Err(_))
   }
+}
+
+///|
+test "compatibility mode accepts the legacy apostrophe test vector" {
+  assert_true(@moonuritemplate.parse("'{var}'") is Err(_))
+  assert_true(@moonuritemplate.parse("'{var}'", strict_literals=false) is Ok(_))
 }
 
 ///|
