@@ -22,6 +22,15 @@ pub fn CatalogBatchError::code(self : CatalogBatchError) -> String {
 }
 
 ///|
+/// Zero-based request index when a catalog batch failed on one row.
+pub fn CatalogBatchError::index(self : CatalogBatchError) -> Int? {
+  match self {
+    InvalidRequest(index, _) => Some(index)
+    _ => None
+  }
+}
+
+///|
 /// Expand a mixed set of catalog entries in request order. A failure returns
 /// the failing request index; no partial collection is returned to the caller.
 pub fn TemplateCatalog::expand_requests(

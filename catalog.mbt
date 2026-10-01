@@ -117,9 +117,44 @@ pub fn CatalogError::code(self : CatalogError) -> String {
 }
 
 ///|
+/// The offending catalog key when an error belongs to a specific entry.
+pub fn CatalogError::name(self : CatalogError) -> String? {
+  match self {
+    DuplicateName(name) | InvalidTemplate(name, _) => Some(name)
+    TooManyTemplates | EmptyName => None
+  }
+}
+
+///|
+/// The underlying RFC 6570 syntax error, including its source offset.
+pub fn CatalogError::parse_error(self : CatalogError) -> ParseError? {
+  match self {
+    InvalidTemplate(_, error) => Some(error)
+    _ => None
+  }
+}
+
+///|
 pub fn CatalogExpandError::code(self : CatalogExpandError) -> String {
   match self {
     UnknownTemplate(_) => "unknown_template"
     InvalidBinding(_, _) => "invalid_binding"
+  }
+}
+
+///|
+pub fn CatalogExpandError::name(self : CatalogExpandError) -> String {
+  match self {
+    UnknownTemplate(name) | InvalidBinding(name, _) => name
+  }
+}
+
+///|
+pub fn CatalogExpandError::expand_error(
+  self : CatalogExpandError,
+) -> ExpandError? {
+  match self {
+    InvalidBinding(_, error) => Some(error)
+    UnknownTemplate(_) => None
   }
 }
