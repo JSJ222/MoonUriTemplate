@@ -19,8 +19,6 @@ jobs:
       - uses: hustcer/setup-moonbit@v1.23
       - name: Toolchain
         run: moon version --all
-      - name: Resolve dependencies
-        run: moon update
       - name: Regenerate conformance tests
         run: |
           python tools/generate_conformance.py
