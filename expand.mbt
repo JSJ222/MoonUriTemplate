@@ -32,10 +32,11 @@ pub fn Template::expand(
   for segment in self.segments {
     let text = match segment {
       Literal(raw) => encode_literal(raw)
-      Expression(op, specs, _, _) => match expand_expression(op, specs, values, max_output - used) {
-        Ok(text) => text
-        Err(error) => return Err(error)
-      }
+      Expression(op, specs, _, _) =>
+        match expand_expression(op, specs, values, max_output - used) {
+          Ok(text) => text
+          Err(error) => return Err(error)
+        }
     }
     if text.length() > max_output - used {
       return Err(OutputTooLong)
@@ -105,10 +106,11 @@ fn check_value(
       }
       for item in items {
         match item {
-          Some(text) => match check_text(text, name, max_value_length) {
-            Ok(_) => ()
-            Err(error) => return Err(error)
-          }
+          Some(text) =>
+            match check_text(text, name, max_value_length) {
+              Ok(_) => ()
+              Err(error) => return Err(error)
+            }
           None => ()
         }
       }
@@ -125,10 +127,11 @@ fn check_value(
           Err(error) => return Err(error)
         }
         match item {
-          Some(text) => match check_text(text, name, max_value_length) {
-            Ok(_) => ()
-            Err(error) => return Err(error)
-          }
+          Some(text) =>
+            match check_text(text, name, max_value_length) {
+              Ok(_) => ()
+              Err(error) => return Err(error)
+            }
           None => ()
         }
       }
@@ -201,13 +204,17 @@ priv struct PieceBuffer {
 
 ///|
 fn PieceBuffer::new(separator : String, limit : Int) -> PieceBuffer {
-  { pieces: [], separator, limit, used: 0 }
+  { pieces: [], separator, limit, used: 0, }
 }
 
 ///|
-fn PieceBuffer::push(self : PieceBuffer, piece : String) -> Result[Unit, ExpandError] {
+fn PieceBuffer::push(
+  self : PieceBuffer,
+  piece : String,
+) -> Result[Unit, ExpandError] {
   let extra = if self.pieces.is_empty() { 0 } else { self.separator.length() }
-  if self.used > self.limit - extra || piece.length() > self.limit - extra - self.used {
+  if self.used > self.limit - extra ||
+    piece.length() > self.limit - extra - self.used {
     return Err(OutputTooLong)
   }
   self.pieces.push(piece)
@@ -232,15 +239,17 @@ fn expand_expression(
   for spec in specs {
     match values.get(spec.name) {
       None => ()
-      Some(value) => match expand_variable(op, spec, value, limit) {
-        Ok(items) => for item in items {
-          match pieces.push(item) {
-            Ok(_) => ()
-            Err(error) => return Err(error)
-          }
+      Some(value) =>
+        match expand_variable(op, spec, value, limit) {
+          Ok(items) =>
+            for item in items {
+              match pieces.push(item) {
+                Ok(_) => ()
+                Err(error) => return Err(error)
+              }
+            }
+          Err(error) => return Err(error)
         }
-        Err(error) => return Err(error)
-      }
     }
   }
   if pieces.pieces.is_empty() {
@@ -277,7 +286,11 @@ fn expand_variable(
         Some(length) => scalar_prefix(raw, length)
       }
       let piece = named_piece(op, spec.name, encode_value(selected, reserved))
-      if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
+      if piece.length() > limit {
+        Err(OutputTooLong)
+      } else {
+        Ok([piece])
+      }
     }
     List(items) => {
       if spec.prefix is Some(_) {
@@ -289,7 +302,10 @@ fn expand_variable(
       if spec.explode {
         let pieces = PieceBuffer::new(operator_separator(op), limit)
         for item in items {
-          match pieces.push(named_piece(op, spec.name, encode_value(item, reserved))) {
+          match
+            pieces.push(
+              named_piece(op, spec.name, encode_value(item, reserved)),
+            ) {
             Ok(_) => ()
             Err(error) => return Err(error)
           }
@@ -304,7 +320,11 @@ fn expand_variable(
           }
         }
         let piece = named_piece(op, spec.name, encoded.join())
-        if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
+        if piece.length() > limit {
+          Err(OutputTooLong)
+        } else {
+          Ok([piece])
+        }
       }
     }
     Assoc(entries) => {
@@ -345,7 +365,11 @@ fn expand_variable(
           }
         }
         let piece = named_piece(op, spec.name, encoded.join())
-        if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
+        if piece.length() > limit {
+          Err(OutputTooLong)
+        } else {
+          Ok([piece])
+        }
       }
     }
     SparseList(items) => {

@@ -2,9 +2,14 @@
 /// Return the UTF-16 code-unit offset of a parse error, if applicable.
 pub fn ParseError::offset(self : ParseError) -> Int? {
   match self {
-    InvalidUnicode(at) | InvalidLiteral(at) | UnclosedExpression(at) |
-    NestedExpression(at) | EmptyExpression(at) | InvalidOperator(at) |
-    InvalidVariable(at) | InvalidModifier(at) => Some(at)
+    InvalidUnicode(at)
+    | InvalidLiteral(at)
+    | UnclosedExpression(at)
+    | NestedExpression(at)
+    | EmptyExpression(at)
+    | InvalidOperator(at)
+    | InvalidVariable(at)
+    | InvalidModifier(at) => Some(at)
     InputTooLong | TooManyExpressions | TooManyVariables => None
   }
 }
@@ -33,7 +38,8 @@ pub fn ParseError::message(self : ParseError) -> String {
   match self {
     InputTooLong => "template exceeds the configured length limit"
     InvalidUnicode(_) => "template contains an unpaired UTF-16 surrogate"
-    InvalidLiteral(_) => "literal contains a forbidden character or malformed percent triplet"
+    InvalidLiteral(_) =>
+      "literal contains a forbidden character or malformed percent triplet"
     UnclosedExpression(_) => "expression has no closing brace"
     NestedExpression(_) => "expression contains an opening brace"
     EmptyExpression(_) => "expression has no variable specification"
@@ -66,7 +72,8 @@ pub fn ExpandError::message(self : ExpandError) -> String {
     InvalidValue(name) => "invalid value for variable " + name
     TooManyBindings => "too many variable bindings"
     ValueTooLong(name) => "value exceeds the length limit for variable " + name
-    TooManyItems(name) => "composite value has too many items for variable " + name
+    TooManyItems(name) =>
+      "composite value has too many items for variable " + name
     OutputTooLong => "expansion exceeds the configured output limit"
   }
 }

@@ -115,43 +115,133 @@ test "spec-examples.json: Level 4 Examples" {
     ("{var:30}", ["value"]),
     ("{list}", ["red,green,blue"]),
     ("{list*}", ["red,green,blue"]),
-    ("{keys}", ["comma,%2C,dot,.,semi,%3B", "comma,%2C,semi,%3B,dot,.", "dot,.,comma,%2C,semi,%3B", "dot,.,semi,%3B,comma,%2C", "semi,%3B,comma,%2C,dot,.", "semi,%3B,dot,.,comma,%2C"]),
-    ("{keys*}", ["comma=%2C,dot=.,semi=%3B", "comma=%2C,semi=%3B,dot=.", "dot=.,comma=%2C,semi=%3B", "dot=.,semi=%3B,comma=%2C", "semi=%3B,comma=%2C,dot=.", "semi=%3B,dot=.,comma=%2C"]),
+    (
+      "{keys}",
+      [
+        "comma,%2C,dot,.,semi,%3B", "comma,%2C,semi,%3B,dot,.", "dot,.,comma,%2C,semi,%3B",
+        "dot,.,semi,%3B,comma,%2C", "semi,%3B,comma,%2C,dot,.", "semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{keys*}",
+      [
+        "comma=%2C,dot=.,semi=%3B", "comma=%2C,semi=%3B,dot=.", "dot=.,comma=%2C,semi=%3B",
+        "dot=.,semi=%3B,comma=%2C", "semi=%3B,comma=%2C,dot=.", "semi=%3B,dot=.,comma=%2C",
+      ],
+    ),
     ("{+path:6}/here", ["/foo/b/here"]),
     ("{+list}", ["red,green,blue"]),
     ("{+list*}", ["red,green,blue"]),
-    ("{+keys}", ["comma,,,dot,.,semi,;", "comma,,,semi,;,dot,.", "dot,.,comma,,,semi,;", "dot,.,semi,;,comma,,", "semi,;,comma,,,dot,.", "semi,;,dot,.,comma,,"]),
-    ("{+keys*}", ["comma=,,dot=.,semi=;", "comma=,,semi=;,dot=.", "dot=.,comma=,,semi=;", "dot=.,semi=;,comma=,", "semi=;,comma=,,dot=.", "semi=;,dot=.,comma=,"]),
+    (
+      "{+keys}",
+      [
+        "comma,,,dot,.,semi,;", "comma,,,semi,;,dot,.", "dot,.,comma,,,semi,;", "dot,.,semi,;,comma,,",
+        "semi,;,comma,,,dot,.", "semi,;,dot,.,comma,,",
+      ],
+    ),
+    (
+      "{+keys*}",
+      [
+        "comma=,,dot=.,semi=;", "comma=,,semi=;,dot=.", "dot=.,comma=,,semi=;", "dot=.,semi=;,comma=,",
+        "semi=;,comma=,,dot=.", "semi=;,dot=.,comma=,",
+      ],
+    ),
     ("{#path:6}/here", ["#/foo/b/here"]),
     ("{#list}", ["#red,green,blue"]),
     ("{#list*}", ["#red,green,blue"]),
-    ("{#keys}", ["#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;", "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,"]),
-    ("{#keys*}", ["#comma=,,dot=.,semi=;", "#comma=,,semi=;,dot=.", "#dot=.,comma=,,semi=;", "#dot=.,semi=;,comma=,", "#semi=;,comma=,,dot=.", "#semi=;,dot=.,comma=,"]),
+    (
+      "{#keys}",
+      [
+        "#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;",
+        "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,",
+      ],
+    ),
+    (
+      "{#keys*}",
+      [
+        "#comma=,,dot=.,semi=;", "#comma=,,semi=;,dot=.", "#dot=.,comma=,,semi=;",
+        "#dot=.,semi=;,comma=,", "#semi=;,comma=,,dot=.", "#semi=;,dot=.,comma=,",
+      ],
+    ),
     ("X{.var:3}", ["X.val"]),
     ("X{.list}", ["X.red,green,blue"]),
     ("X{.list*}", ["X.red.green.blue"]),
-    ("X{.keys}", ["X.comma,%2C,dot,.,semi,%3B", "X.comma,%2C,semi,%3B,dot,.", "X.dot,.,comma,%2C,semi,%3B", "X.dot,.,semi,%3B,comma,%2C", "X.semi,%3B,comma,%2C,dot,.", "X.semi,%3B,dot,.,comma,%2C"]),
+    (
+      "X{.keys}",
+      [
+        "X.comma,%2C,dot,.,semi,%3B", "X.comma,%2C,semi,%3B,dot,.", "X.dot,.,comma,%2C,semi,%3B",
+        "X.dot,.,semi,%3B,comma,%2C", "X.semi,%3B,comma,%2C,dot,.", "X.semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
     ("{/var:1,var}", ["/v/value"]),
     ("{/list}", ["/red,green,blue"]),
     ("{/list*}", ["/red/green/blue"]),
     ("{/list*,path:4}", ["/red/green/blue/%2Ffoo"]),
-    ("{/keys}", ["/comma,%2C,dot,.,semi,%3B", "/comma,%2C,semi,%3B,dot,.", "/dot,.,comma,%2C,semi,%3B", "/dot,.,semi,%3B,comma,%2C", "/semi,%3B,comma,%2C,dot,.", "/semi,%3B,dot,.,comma,%2C"]),
-    ("{/keys*}", ["/comma=%2C/dot=./semi=%3B", "/comma=%2C/semi=%3B/dot=.", "/dot=./comma=%2C/semi=%3B", "/dot=./semi=%3B/comma=%2C", "/semi=%3B/comma=%2C/dot=.", "/semi=%3B/dot=./comma=%2C"]),
+    (
+      "{/keys}",
+      [
+        "/comma,%2C,dot,.,semi,%3B", "/comma,%2C,semi,%3B,dot,.", "/dot,.,comma,%2C,semi,%3B",
+        "/dot,.,semi,%3B,comma,%2C", "/semi,%3B,comma,%2C,dot,.", "/semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{/keys*}",
+      [
+        "/comma=%2C/dot=./semi=%3B", "/comma=%2C/semi=%3B/dot=.", "/dot=./comma=%2C/semi=%3B",
+        "/dot=./semi=%3B/comma=%2C", "/semi=%3B/comma=%2C/dot=.", "/semi=%3B/dot=./comma=%2C",
+      ],
+    ),
     ("{;hello:5}", [";hello=Hello"]),
     ("{;list}", [";list=red,green,blue"]),
     ("{;list*}", [";list=red;list=green;list=blue"]),
-    ("{;keys}", [";keys=comma,%2C,dot,.,semi,%3B", ";keys=comma,%2C,semi,%3B,dot,.", ";keys=dot,.,comma,%2C,semi,%3B", ";keys=dot,.,semi,%3B,comma,%2C", ";keys=semi,%3B,comma,%2C,dot,.", ";keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{;keys*}", [";comma=%2C;dot=.;semi=%3B", ";comma=%2C;semi=%3B;dot=.", ";dot=.;comma=%2C;semi=%3B", ";dot=.;semi=%3B;comma=%2C", ";semi=%3B;comma=%2C;dot=.", ";semi=%3B;dot=.;comma=%2C"]),
+    (
+      "{;keys}",
+      [
+        ";keys=comma,%2C,dot,.,semi,%3B", ";keys=comma,%2C,semi,%3B,dot,.", ";keys=dot,.,comma,%2C,semi,%3B",
+        ";keys=dot,.,semi,%3B,comma,%2C", ";keys=semi,%3B,comma,%2C,dot,.", ";keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{;keys*}",
+      [
+        ";comma=%2C;dot=.;semi=%3B", ";comma=%2C;semi=%3B;dot=.", ";dot=.;comma=%2C;semi=%3B",
+        ";dot=.;semi=%3B;comma=%2C", ";semi=%3B;comma=%2C;dot=.", ";semi=%3B;dot=.;comma=%2C",
+      ],
+    ),
     ("{?var:3}", ["?var=val"]),
     ("{?list}", ["?list=red,green,blue"]),
     ("{?list*}", ["?list=red&list=green&list=blue"]),
-    ("{?keys}", ["?keys=comma,%2C,dot,.,semi,%3B", "?keys=comma,%2C,semi,%3B,dot,.", "?keys=dot,.,comma,%2C,semi,%3B", "?keys=dot,.,semi,%3B,comma,%2C", "?keys=semi,%3B,comma,%2C,dot,.", "?keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{?keys*}", ["?comma=%2C&dot=.&semi=%3B", "?comma=%2C&semi=%3B&dot=.", "?dot=.&comma=%2C&semi=%3B", "?dot=.&semi=%3B&comma=%2C", "?semi=%3B&comma=%2C&dot=.", "?semi=%3B&dot=.&comma=%2C"]),
+    (
+      "{?keys}",
+      [
+        "?keys=comma,%2C,dot,.,semi,%3B", "?keys=comma,%2C,semi,%3B,dot,.", "?keys=dot,.,comma,%2C,semi,%3B",
+        "?keys=dot,.,semi,%3B,comma,%2C", "?keys=semi,%3B,comma,%2C,dot,.", "?keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{?keys*}",
+      [
+        "?comma=%2C&dot=.&semi=%3B", "?comma=%2C&semi=%3B&dot=.", "?dot=.&comma=%2C&semi=%3B",
+        "?dot=.&semi=%3B&comma=%2C", "?semi=%3B&comma=%2C&dot=.", "?semi=%3B&dot=.&comma=%2C",
+      ],
+    ),
     ("{&var:3}", ["&var=val"]),
     ("{&list}", ["&list=red,green,blue"]),
     ("{&list*}", ["&list=red&list=green&list=blue"]),
-    ("{&keys}", ["&keys=comma,%2C,dot,.,semi,%3B", "&keys=comma,%2C,semi,%3B,dot,.", "&keys=dot,.,comma,%2C,semi,%3B", "&keys=dot,.,semi,%3B,comma,%2C", "&keys=semi,%3B,comma,%2C,dot,.", "&keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{&keys*}", ["&comma=%2C&dot=.&semi=%3B", "&comma=%2C&semi=%3B&dot=.", "&dot=.&comma=%2C&semi=%3B", "&dot=.&semi=%3B&comma=%2C", "&semi=%3B&comma=%2C&dot=.", "&semi=%3B&dot=.&comma=%2C"]),
+    (
+      "{&keys}",
+      [
+        "&keys=comma,%2C,dot,.,semi,%3B", "&keys=comma,%2C,semi,%3B,dot,.", "&keys=dot,.,comma,%2C,semi,%3B",
+        "&keys=dot,.,semi,%3B,comma,%2C", "&keys=semi,%3B,comma,%2C,dot,.", "&keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{&keys*}",
+      [
+        "&comma=%2C&dot=.&semi=%3B", "&comma=%2C&semi=%3B&dot=.", "&dot=.&comma=%2C&semi=%3B",
+        "&dot=.&semi=%3B&comma=%2C", "&semi=%3B&comma=%2C&dot=.", "&semi=%3B&dot=.&comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -275,8 +365,20 @@ test "spec-examples-by-section.json: 3.2.2 Simple String Expansion" {
     ("{var:30}", ["value"]),
     ("{list}", ["red,green,blue"]),
     ("{list*}", ["red,green,blue"]),
-    ("{keys}", ["comma,%2C,dot,.,semi,%3B", "comma,%2C,semi,%3B,dot,.", "dot,.,comma,%2C,semi,%3B", "dot,.,semi,%3B,comma,%2C", "semi,%3B,comma,%2C,dot,.", "semi,%3B,dot,.,comma,%2C"]),
-    ("{keys*}", ["comma=%2C,dot=.,semi=%3B", "comma=%2C,semi=%3B,dot=.", "dot=.,comma=%2C,semi=%3B", "dot=.,semi=%3B,comma=%2C", "semi=%3B,comma=%2C,dot=.", "semi=%3B,dot=.,comma=%2C"]),
+    (
+      "{keys}",
+      [
+        "comma,%2C,dot,.,semi,%3B", "comma,%2C,semi,%3B,dot,.", "dot,.,comma,%2C,semi,%3B",
+        "dot,.,semi,%3B,comma,%2C", "semi,%3B,comma,%2C,dot,.", "semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{keys*}",
+      [
+        "comma=%2C,dot=.,semi=%3B", "comma=%2C,semi=%3B,dot=.", "dot=.,comma=%2C,semi=%3B",
+        "dot=.,semi=%3B,comma=%2C", "semi=%3B,comma=%2C,dot=.", "semi=%3B,dot=.,comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -332,8 +434,20 @@ test "spec-examples-by-section.json: 3.2.3 Reserved Expansion" {
     ("{+path,x}/here", ["/foo/bar,1024/here"]),
     ("{+list}", ["red,green,blue"]),
     ("{+list*}", ["red,green,blue"]),
-    ("{+keys}", ["comma,,,dot,.,semi,;", "comma,,,semi,;,dot,.", "dot,.,comma,,,semi,;", "dot,.,semi,;,comma,,", "semi,;,comma,,,dot,.", "semi,;,dot,.,comma,,"]),
-    ("{+keys*}", ["comma=,,dot=.,semi=;", "comma=,,semi=;,dot=.", "dot=.,comma=,,semi=;", "dot=.,semi=;,comma=,", "semi=;,comma=,,dot=.", "semi=;,dot=.,comma=,"]),
+    (
+      "{+keys}",
+      [
+        "comma,,,dot,.,semi,;", "comma,,,semi,;,dot,.", "dot,.,comma,,,semi,;", "dot,.,semi,;,comma,,",
+        "semi,;,comma,,,dot,.", "semi,;,dot,.,comma,,",
+      ],
+    ),
+    (
+      "{+keys*}",
+      [
+        "comma=,,dot=.,semi=;", "comma=,,semi=;,dot=.", "dot=.,comma=,,semi=;", "dot=.,semi=;,comma=,",
+        "semi=;,comma=,,dot=.", "semi=;,dot=.,comma=,",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -382,7 +496,13 @@ test "spec-examples-by-section.json: 3.2.4 Fragment Expansion" {
     ("{#path:6}/here", ["#/foo/b/here"]),
     ("{#list}", ["#red,green,blue"]),
     ("{#list*}", ["#red,green,blue"]),
-    ("{#keys}", ["#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;", "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,"]),
+    (
+      "{#keys}",
+      [
+        "#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;",
+        "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -431,8 +551,20 @@ test "spec-examples-by-section.json: 3.2.5 Label Expansion with Dot-Prefix" {
     ("X{.undef}", ["X"]),
     ("X{.list}", ["X.red,green,blue"]),
     ("X{.list*}", ["X.red.green.blue"]),
-    ("{#keys}", ["#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;", "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,"]),
-    ("{#keys*}", ["#comma=,,dot=.,semi=;", "#comma=,,semi=;,dot=.", "#dot=.,comma=,,semi=;", "#dot=.,semi=;,comma=,", "#semi=;,comma=,,dot=.", "#semi=;,dot=.,comma=,"]),
+    (
+      "{#keys}",
+      [
+        "#comma,,,dot,.,semi,;", "#comma,,,semi,;,dot,.", "#dot,.,comma,,,semi,;",
+        "#dot,.,semi,;,comma,,", "#semi,;,comma,,,dot,.", "#semi,;,dot,.,comma,,",
+      ],
+    ),
+    (
+      "{#keys*}",
+      [
+        "#comma=,,dot=.,semi=;", "#comma=,,semi=;,dot=.", "#dot=.,comma=,,semi=;",
+        "#dot=.,semi=;,comma=,", "#semi=;,comma=,,dot=.", "#semi=;,dot=.,comma=,",
+      ],
+    ),
     ("X{.empty_keys}", ["X"]),
     ("X{.empty_keys*}", ["X"]),
   ]
@@ -485,8 +617,20 @@ test "spec-examples-by-section.json: 3.2.6 Path Segment Expansion" {
     ("{/list}", ["/red,green,blue"]),
     ("{/list*}", ["/red/green/blue"]),
     ("{/list*,path:4}", ["/red/green/blue/%2Ffoo"]),
-    ("{/keys}", ["/comma,%2C,dot,.,semi,%3B", "/comma,%2C,semi,%3B,dot,.", "/dot,.,comma,%2C,semi,%3B", "/dot,.,semi,%3B,comma,%2C", "/semi,%3B,comma,%2C,dot,.", "/semi,%3B,dot,.,comma,%2C"]),
-    ("{/keys*}", ["/comma=%2C/dot=./semi=%3B", "/comma=%2C/semi=%3B/dot=.", "/dot=./comma=%2C/semi=%3B", "/dot=./semi=%3B/comma=%2C", "/semi=%3B/comma=%2C/dot=.", "/semi=%3B/dot=./comma=%2C"]),
+    (
+      "{/keys}",
+      [
+        "/comma,%2C,dot,.,semi,%3B", "/comma,%2C,semi,%3B,dot,.", "/dot,.,comma,%2C,semi,%3B",
+        "/dot,.,semi,%3B,comma,%2C", "/semi,%3B,comma,%2C,dot,.", "/semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{/keys*}",
+      [
+        "/comma=%2C/dot=./semi=%3B", "/comma=%2C/semi=%3B/dot=.", "/dot=./comma=%2C/semi=%3B",
+        "/dot=./semi=%3B/comma=%2C", "/semi=%3B/comma=%2C/dot=.", "/semi=%3B/dot=./comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -536,8 +680,20 @@ test "spec-examples-by-section.json: 3.2.7 Path-Style Parameter Expansion" {
     ("{;x,y,undef}", [";x=1024;y=768"]),
     ("{;list}", [";list=red,green,blue"]),
     ("{;list*}", [";list=red;list=green;list=blue"]),
-    ("{;keys}", [";keys=comma,%2C,dot,.,semi,%3B", ";keys=comma,%2C,semi,%3B,dot,.", ";keys=dot,.,comma,%2C,semi,%3B", ";keys=dot,.,semi,%3B,comma,%2C", ";keys=semi,%3B,comma,%2C,dot,.", ";keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{;keys*}", [";comma=%2C;dot=.;semi=%3B", ";comma=%2C;semi=%3B;dot=.", ";dot=.;comma=%2C;semi=%3B", ";dot=.;semi=%3B;comma=%2C", ";semi=%3B;comma=%2C;dot=.", ";semi=%3B;dot=.;comma=%2C"]),
+    (
+      "{;keys}",
+      [
+        ";keys=comma,%2C,dot,.,semi,%3B", ";keys=comma,%2C,semi,%3B,dot,.", ";keys=dot,.,comma,%2C,semi,%3B",
+        ";keys=dot,.,semi,%3B,comma,%2C", ";keys=semi,%3B,comma,%2C,dot,.", ";keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{;keys*}",
+      [
+        ";comma=%2C;dot=.;semi=%3B", ";comma=%2C;semi=%3B;dot=.", ";dot=.;comma=%2C;semi=%3B",
+        ";dot=.;semi=%3B;comma=%2C", ";semi=%3B;comma=%2C;dot=.", ";semi=%3B;dot=.;comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -584,8 +740,20 @@ test "spec-examples-by-section.json: 3.2.8 Form-Style Query Expansion" {
     ("{?var:3}", ["?var=val"]),
     ("{?list}", ["?list=red,green,blue"]),
     ("{?list*}", ["?list=red&list=green&list=blue"]),
-    ("{?keys}", ["?keys=comma,%2C,dot,.,semi,%3B", "?keys=comma,%2C,semi,%3B,dot,.", "?keys=dot,.,comma,%2C,semi,%3B", "?keys=dot,.,semi,%3B,comma,%2C", "?keys=semi,%3B,comma,%2C,dot,.", "?keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{?keys*}", ["?comma=%2C&dot=.&semi=%3B", "?comma=%2C&semi=%3B&dot=.", "?dot=.&comma=%2C&semi=%3B", "?dot=.&semi=%3B&comma=%2C", "?semi=%3B&comma=%2C&dot=.", "?semi=%3B&dot=.&comma=%2C"]),
+    (
+      "{?keys}",
+      [
+        "?keys=comma,%2C,dot,.,semi,%3B", "?keys=comma,%2C,semi,%3B,dot,.", "?keys=dot,.,comma,%2C,semi,%3B",
+        "?keys=dot,.,semi,%3B,comma,%2C", "?keys=semi,%3B,comma,%2C,dot,.", "?keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{?keys*}",
+      [
+        "?comma=%2C&dot=.&semi=%3B", "?comma=%2C&semi=%3B&dot=.", "?dot=.&comma=%2C&semi=%3B",
+        "?dot=.&semi=%3B&comma=%2C", "?semi=%3B&comma=%2C&dot=.", "?semi=%3B&dot=.&comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -632,8 +800,20 @@ test "spec-examples-by-section.json: 3.2.9 Form-Style Query Continuation" {
     ("{&x,y,undef}", ["&x=1024&y=768"]),
     ("{&list}", ["&list=red,green,blue"]),
     ("{&list*}", ["&list=red&list=green&list=blue"]),
-    ("{&keys}", ["&keys=comma,%2C,dot,.,semi,%3B", "&keys=comma,%2C,semi,%3B,dot,.", "&keys=dot,.,comma,%2C,semi,%3B", "&keys=dot,.,semi,%3B,comma,%2C", "&keys=semi,%3B,comma,%2C,dot,.", "&keys=semi,%3B,dot,.,comma,%2C"]),
-    ("{&keys*}", ["&comma=%2C&dot=.&semi=%3B", "&comma=%2C&semi=%3B&dot=.", "&dot=.&comma=%2C&semi=%3B", "&dot=.&semi=%3B&comma=%2C", "&semi=%3B&comma=%2C&dot=.", "&semi=%3B&dot=.&comma=%2C"]),
+    (
+      "{&keys}",
+      [
+        "&keys=comma,%2C,dot,.,semi,%3B", "&keys=comma,%2C,semi,%3B,dot,.", "&keys=dot,.,comma,%2C,semi,%3B",
+        "&keys=dot,.,semi,%3B,comma,%2C", "&keys=semi,%3B,comma,%2C,dot,.", "&keys=semi,%3B,dot,.,comma,%2C",
+      ],
+    ),
+    (
+      "{&keys*}",
+      [
+        "&comma=%2C&dot=.&semi=%3B", "&comma=%2C&semi=%3B&dot=.", "&dot=.&comma=%2C&semi=%3B",
+        "&dot=.&semi=%3B&comma=%2C", "&semi=%3B&comma=%2C&dot=.", "&semi=%3B&dot=.&comma=%2C",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -669,27 +849,71 @@ test "extended-tests.json: Additional Examples 1" {
     ("long", Scalar("37.76")),
     ("lat", Scalar("-122.427")),
     ("group_id", Scalar("12345")),
-    ("query", Scalar("PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")),
+    (
+      "query",
+      Scalar(
+        "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }",
+      ),
+    ),
     ("uri", Scalar("http://example.org/?uri=http%3A%2F%2Fexample.org%2F")),
     ("word", Scalar("drücken")),
     ("Stra%C3%9Fe", Scalar("Grüner Weg")),
-    ("random", Scalar("šöäŸœñê€£¥‡ÑÒÓÔÕÖ×ØÙÚàáâãäåæçÿ")),
-    ("assoc_special_chars", Assoc([("šöäŸœñê€£¥‡ÑÒÓÔÕ", "Ö×ØÙÚàáâãäåæçÿ")])),
+    (
+      "random",
+      Scalar("šöäŸœñê€£¥‡ÑÒÓÔÕÖ×ØÙÚàáâãäåæçÿ"),
+    ),
+    (
+      "assoc_special_chars",
+      Assoc([
+        ("šöäŸœñê€£¥‡ÑÒÓÔÕ", "Ö×ØÙÚàáâãäåæçÿ"),
+      ]),
+    ),
   ]
   let cases : Array[(String, Array[String])] = [
     ("{/id*}", ["/person"]),
-    ("{/id*}{?fields,first_name,last.name,token}", ["/person?fields=id,name,picture&first_name=John&last.name=Doe&token=12345"]),
-    ("/search.{format}{?q,geocode,lang,locale,page,result_type}", ["/search.json?q=URI%20Templates&geocode=37.76,-122.427&lang=en&page=5"]),
+    (
+      "{/id*}{?fields,first_name,last.name,token}",
+      [
+        "/person?fields=id,name,picture&first_name=John&last.name=Doe&token=12345",
+      ],
+    ),
+    (
+      "/search.{format}{?q,geocode,lang,locale,page,result_type}",
+      ["/search.json?q=URI%20Templates&geocode=37.76,-122.427&lang=en&page=5"],
+    ),
     ("/test{/Some%20Thing}", ["/test/foo"]),
     ("/set{?number}", ["/set?number=6"]),
     ("/loc{?long,lat}", ["/loc?long=37.76&lat=-122.427"]),
-    ("/base{/group_id,first_name}/pages{/page,lang}{?format,q}", ["/base/12345/John/pages/5/en?format=json&q=URI%20Templates"]),
-    ("/sparql{?query}", ["/sparql?query=PREFIX%20dc%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%20SELECT%20%3Fbook%20%3Fwho%20WHERE%20%7B%20%3Fbook%20dc%3Acreator%20%3Fwho%20%7D"]),
-    ("/go{?uri}", ["/go?uri=http%3A%2F%2Fexample.org%2F%3Furi%3Dhttp%253A%252F%252Fexample.org%252F"]),
+    (
+      "/base{/group_id,first_name}/pages{/page,lang}{?format,q}",
+      ["/base/12345/John/pages/5/en?format=json&q=URI%20Templates"],
+    ),
+    (
+      "/sparql{?query}",
+      [
+        "/sparql?query=PREFIX%20dc%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%20SELECT%20%3Fbook%20%3Fwho%20WHERE%20%7B%20%3Fbook%20dc%3Acreator%20%3Fwho%20%7D",
+      ],
+    ),
+    (
+      "/go{?uri}",
+      [
+        "/go?uri=http%3A%2F%2Fexample.org%2F%3Furi%3Dhttp%253A%252F%252Fexample.org%252F",
+      ],
+    ),
     ("/service{?word}", ["/service?word=dr%C3%BCcken"]),
     ("/lookup{?Stra%C3%9Fe}", ["/lookup?Stra%C3%9Fe=Gr%C3%BCner%20Weg"]),
-    ("{random}", ["%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF"]),
-    ("{?assoc_special_chars*}", ["?%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95=%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF"]),
+    (
+      "{random}",
+      [
+        "%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF",
+      ],
+    ),
+    (
+      "{?assoc_special_chars*}",
+      [
+        "?%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95=%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -722,7 +946,10 @@ test "extended-tests.json: Additional Examples 2" {
   ]
   let cases : Array[(String, Array[String])] = [
     ("{/id*}", ["/person/albums"]),
-    ("{/id*}{?fields,token}", ["/person/albums?fields=id,name,picture&token=12345"]),
+    (
+      "{/id*}{?fields,token}",
+      ["/person/albums?fields=id,name,picture&token=12345"],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -773,13 +1000,28 @@ test "extended-tests.json: Additional Examples 3: Empty Variables" {
 ///|
 test "extended-tests.json: Additional Examples 4: Numeric Keys" {
   let bindings : Array[(String, @moonuritemplate.Value)] = [
-    ("42", Scalar("The Answer to the Ultimate Question of Life, the Universe, and Everything")),
+    (
+      "42",
+      Scalar(
+        "The Answer to the Ultimate Question of Life, the Universe, and Everything",
+      ),
+    ),
     ("1337", List(["leet", "as", "it", "can", "be"])),
     ("german", Assoc([("11", "elf"), ("12", "zwölf")])),
   ]
   let cases : Array[(String, Array[String])] = [
-    ("{42}", ["The%20Answer%20to%20the%20Ultimate%20Question%20of%20Life%2C%20the%20Universe%2C%20and%20Everything"]),
-    ("{?42}", ["?42=The%20Answer%20to%20the%20Ultimate%20Question%20of%20Life%2C%20the%20Universe%2C%20and%20Everything"]),
+    (
+      "{42}",
+      [
+        "The%20Answer%20to%20the%20Ultimate%20Question%20of%20Life%2C%20the%20Universe%2C%20and%20Everything",
+      ],
+    ),
+    (
+      "{?42}",
+      [
+        "?42=The%20Answer%20to%20the%20Ultimate%20Question%20of%20Life%2C%20the%20Universe%2C%20and%20Everything",
+      ],
+    ),
     ("{1337}", ["leet,as,it,can,be"]),
     ("{?1337*}", ["?1337=leet&1337=as&1337=it&1337=can&1337=be"]),
     ("{?german*}", ["?11=elf&12=zw%C3%B6lf", "?12=zw%C3%B6lf&11=elf"]),
@@ -809,10 +1051,30 @@ test "extended-tests.json: Additional Examples 5: Explode Combinations" {
     ("keys", Assoc([("key1", "val1"), ("key2", "val2")])),
   ]
   let cases : Array[(String, Array[String])] = [
-    ("{?id,token,keys*}", ["?id=admin&token=12345&key1=val1&key2=val2", "?id=admin&token=12345&key2=val2&key1=val1"]),
-    ("{/id}{?token,keys*}", ["/admin?token=12345&key1=val1&key2=val2", "/admin?token=12345&key2=val2&key1=val1"]),
-    ("{?id,token}{&keys*}", ["?id=admin&token=12345&key1=val1&key2=val2", "?id=admin&token=12345&key2=val2&key1=val1"]),
-    ("/user{/id}{?token,tab}{&keys*}", ["/user/admin?token=12345&tab=overview&key1=val1&key2=val2", "/user/admin?token=12345&tab=overview&key2=val2&key1=val1"]),
+    (
+      "{?id,token,keys*}",
+      [
+        "?id=admin&token=12345&key1=val1&key2=val2", "?id=admin&token=12345&key2=val2&key1=val1",
+      ],
+    ),
+    (
+      "{/id}{?token,keys*}",
+      [
+        "/admin?token=12345&key1=val1&key2=val2", "/admin?token=12345&key2=val2&key1=val1",
+      ],
+    ),
+    (
+      "{?id,token}{&keys*}",
+      [
+        "?id=admin&token=12345&key1=val1&key2=val2", "?id=admin&token=12345&key2=val2&key1=val1",
+      ],
+    ),
+    (
+      "/user{/id}{?token,tab}{&keys*}",
+      [
+        "/user/admin?token=12345&tab=overview&key1=val1&key2=val2", "/user/admin?token=12345&tab=overview&key2=val2&key1=val1",
+      ],
+    ),
   ]
   for case in cases {
     let (source, alternatives) = case
@@ -946,52 +1208,34 @@ test "negative-tests.json: Failure Tests" {
     ("example", Scalar("red")),
     ("searchTerms", Scalar("uri templates")),
     ("~thing", Scalar("some-user")),
-    ("default-graph-uri", List(["http://www.example/book/", "http://www.example/papers/"])),
-    ("query", Scalar("PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")),
+    (
+      "default-graph-uri",
+      List(["http://www.example/book/", "http://www.example/papers/"]),
+    ),
+    (
+      "query",
+      Scalar(
+        "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }",
+      ),
+    ),
   ]
   let invalid : Array[String] = [
-    "{/id*",
-    "/id*}",
-    "{/?id}",
-    "{var:prefix}",
-    "{hello:2*}",
-    "{??hello}",
-    "{!hello}",
-    "{with space}",
-    "{ leading_space}",
-    "{trailing_space }",
-    "{=path}",
-    "{$var}",
-    "{|var*}",
-    "{*keys?}",
-    "{?empty=default,var}",
-    "{var}{-prefix|/-/|var}",
-    "?q={searchTerms}&amp;c={example:color?}",
-    "x{?empty|foo=none}",
-    "/h{#hello+}",
-    "/h#{hello+}",
-    "{keys:1}",
-    "{+keys:1}",
-    "{;keys:1*}",
-    "?{-join|&|var,list}",
-    "/people/{~thing}",
-    "/{default-graph-uri}",
-    "/sparql{?query,default-graph-uri}",
-    "/sparql{?query){&default-graph-uri*}",
-    "/resolution{?x, y}",
-    "{var:0}",
-    "{var:01}",
-    "{var:10000}",
-    "{var:}",
-    "{x.}",
-    "{x..y}",
-    "{%2x}",
+    "{/id*", "/id*}", "{/?id}", "{var:prefix}", "{hello:2*}", "{??hello}", "{!hello}",
+    "{with space}", "{ leading_space}", "{trailing_space }", "{=path}", "{$var}",
+    "{|var*}", "{*keys?}", "{?empty=default,var}", "{var}{-prefix|/-/|var}", "?q={searchTerms}&amp;c={example:color?}",
+    "x{?empty|foo=none}", "/h{#hello+}", "/h#{hello+}", "{keys:1}", "{+keys:1}",
+    "{;keys:1*}", "?{-join|&|var,list}", "/people/{~thing}", "/{default-graph-uri}",
+    "/sparql{?query,default-graph-uri}", "/sparql{?query){&default-graph-uri*}",
+    "/resolution{?x, y}", "{var:0}", "{var:01}", "{var:10000}", "{var:}", "{x.}",
+    "{x..y}", "{%2x}",
   ]
   for source in invalid {
     let rejected = match @moonuritemplate.parse(source) {
       Err(_) => true
       Ok(template) => template.expand(bindings) is Err(_)
     }
-    if !rejected { fail("accepted invalid fixture: " + source) }
+    if !rejected {
+      fail("accepted invalid fixture: " + source)
+    }
   }
 }

@@ -87,7 +87,9 @@ pub fn value_from_json(
 ///|
 /// Convert a JSON object to ordered bindings. Object keys are sorted so
 /// associative expansion is deterministic across MoonBit backends.
-pub fn bindings_from_json(input : Json) -> Result[Array[(String, Value)], JsonBridgeError] {
+pub fn bindings_from_json(
+  input : Json,
+) -> Result[Array[(String, Value)], JsonBridgeError] {
   let fields = match input {
     Object(fields) => fields
     _ => return Err(RootMustBeObject)
@@ -101,11 +103,12 @@ pub fn bindings_from_json(input : Json) -> Result[Array[(String, Value)], JsonBr
   for name in names {
     match fields.get(name) {
       None => ()
-      Some(value) => match value_from_json(value, path=pointer_child("", name)) {
-        Ok(Some(converted)) => bindings.push((name, converted))
-        Ok(None) => ()
-        Err(error) => return Err(error)
-      }
+      Some(value) =>
+        match value_from_json(value, path=pointer_child("", name)) {
+          Ok(Some(converted)) => bindings.push((name, converted))
+          Ok(None) => ()
+          Err(error) => return Err(error)
+        }
     }
   }
   Ok(bindings)

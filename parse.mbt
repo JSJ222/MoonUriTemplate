@@ -76,7 +76,7 @@ pub fn parse(
   if literal_start < input.length() {
     segments.push(Literal(input[literal_start:].to_owned()))
   }
-  Ok({ source: input, segments, variables })
+  Ok({ source: input, segments, variables, })
 }
 
 ///|
@@ -121,13 +121,35 @@ fn is_digit(code : Int) -> Bool {
 
 ///|
 fn is_unreserved(code : Int) -> Bool {
-  is_alpha(code) || is_digit(code) || code == 45 || code == 46 || code == 95 || code == 126
+  is_alpha(code) ||
+  is_digit(code) ||
+  code == 45 ||
+  code == 46 ||
+  code == 95 ||
+  code == 126
 }
 
 ///|
 fn is_reserved(code : Int) -> Bool {
   match code {
-    33 | 35 | 36 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 47 | 58 | 59 | 61 | 63 | 64 | 91 | 93 => true
+    33
+    | 35
+    | 36
+    | 38
+    | 39
+    | 40
+    | 41
+    | 42
+    | 43
+    | 44
+    | 47
+    | 58
+    | 59
+    | 61
+    | 63
+    | 64
+    | 91
+    | 93 => true
     _ => false
   }
 }
@@ -151,7 +173,9 @@ fn validate_literal_unit(
 ) -> Result[Int, ParseError] {
   let code = input[at].to_int()
   if code == 37 {
-    if at + 2 < input.length() && is_hex(input[at + 1].to_int()) && is_hex(input[at + 2].to_int()) {
+    if at + 2 < input.length() &&
+      is_hex(input[at + 1].to_int()) &&
+      is_hex(input[at + 2].to_int()) {
       Ok(at + 3)
     } else {
       Err(InvalidLiteral(at))
@@ -162,7 +186,11 @@ fn validate_literal_unit(
   } else if code >= 0xD800 && code <= 0xDBFF {
     let low = input[at + 1].to_int()
     let scalar = 0x10000 + ((code - 0xD800) << 10) + low - 0xDC00
-    if allowed_unicode_literal(scalar) { Ok(at + 2) } else { Err(InvalidLiteral(at)) }
+    if allowed_unicode_literal(scalar) {
+      Ok(at + 2)
+    } else {
+      Err(InvalidLiteral(at))
+    }
   } else if allowed_unicode_literal(code) {
     Ok(at + 1)
   } else {
@@ -178,13 +206,34 @@ fn parse_expression(
 ) -> Result[(Operator, Array[VarSpec]), ParseError] {
   let mut i = start
   let op = match input[i].to_int() {
-    43 => { i += 1; Reserved }
-    35 => { i += 1; Fragment }
-    46 => { i += 1; Label }
-    47 => { i += 1; Path }
-    59 => { i += 1; PathParameter }
-    63 => { i += 1; Query }
-    38 => { i += 1; QueryContinuation }
+    43 => {
+      i += 1
+      Reserved
+    }
+    35 => {
+      i += 1
+      Fragment
+    }
+    46 => {
+      i += 1
+      Label
+    }
+    47 => {
+      i += 1
+      Path
+    }
+    59 => {
+      i += 1
+      PathParameter
+    }
+    63 => {
+      i += 1
+      Query
+    }
+    38 => {
+      i += 1
+      QueryContinuation
+    }
     61 | 44 | 33 | 64 | 124 => return Err(InvalidOperator(i))
     _ => Simple
   }
@@ -225,7 +274,10 @@ fn parse_varspec(
     if is_alpha(code) || is_digit(code) || code == 95 {
       need_char = false
       i += 1
-    } else if code == 37 && i + 2 < end && is_hex(input[i + 1].to_int()) && is_hex(input[i + 2].to_int()) {
+    } else if code == 37 &&
+      i + 2 < end &&
+      is_hex(input[i + 1].to_int()) &&
+      is_hex(input[i + 2].to_int()) {
       need_char = false
       i += 3
     } else if code == 46 && !need_char {
@@ -263,5 +315,5 @@ fn parse_varspec(
   if i < end && input[i].to_int() != 44 {
     return Err(InvalidModifier(i))
   }
-  Ok(({ name, prefix, explode, start, end: i }, i))
+  Ok(({ name, prefix, explode, start, end: i, }, i))
 }

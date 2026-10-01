@@ -1,8 +1,8 @@
 ///|
 test "template parser accepts the complete operator set" {
   let cases = [
-    "{x}", "{+x}", "{#x}", "{.x}", "{/x}", "{;x}", "{?x}", "{&x}",
-    "{x:9999}", "{x*}", "{x,y.z}", "{a%20b}", "fixed%2Fpath",
+    "{x}", "{+x}", "{#x}", "{.x}", "{/x}", "{;x}", "{?x}", "{&x}", "{x:9999}", "{x*}",
+    "{x,y.z}", "{a%20b}", "fixed%2Fpath",
   ]
   for case in cases {
     assert_true(@moonuritemplate.parse(case) is Ok(_))
@@ -12,8 +12,7 @@ test "template parser accepts the complete operator set" {
 ///|
 test "template parser rejects malformed braces and operator spellings" {
   let cases = [
-    "{", "}", "{}", "{+}", "{{x}}", "{x}}", "{=x}", "{,x}", "{!x}",
-    "{@x}", "{|x}",
+    "{", "}", "{}", "{+}", "{{x}}", "{x}}", "{=x}", "{,x}", "{!x}", "{@x}", "{|x}",
   ]
   for case in cases {
     assert_true(@moonuritemplate.parse(case) is Err(_))
@@ -23,9 +22,8 @@ test "template parser rejects malformed braces and operator spellings" {
 ///|
 test "template parser rejects malformed names and modifiers" {
   let cases = [
-    "{a.}", "{.a,}", "{a..b}", "{a,}", "{a,,b}", "{a:}", "{a:0}",
-    "{a:0001}", "{a:10000}", "{a:*}", "{a**}", "{a:2*}", "{a%GG}",
-    "{a%2}", "{%}", "{a-b}",
+    "{a.}", "{.a,}", "{a..b}", "{a,}", "{a,,b}", "{a:}", "{a:0}", "{a:0001}", "{a:10000}",
+    "{a:*}", "{a**}", "{a:2*}", "{a%GG}", "{a%2}", "{%}", "{a-b}",
   ]
   for case in cases {
     assert_true(@moonuritemplate.parse(case) is Err(_))
@@ -34,7 +32,9 @@ test "template parser rejects malformed names and modifiers" {
 
 ///|
 test "template parser rejects malformed literals" {
-  let cases = ["a%", "a%G0", "a b", "a\n", "a|b", "a\\b", "a'b", "a\u{80}b", "a\u{FDD0}b"]
+  let cases = [
+    "a%", "a%G0", "a b", "a\n", "a|b", "a\\b", "a'b", "a\u{80}b", "a\u{FDD0}b",
+  ]
   for case in cases {
     assert_true(@moonuritemplate.parse(case) is Err(_))
   }
@@ -49,8 +49,13 @@ test "compatibility mode accepts the legacy apostrophe test vector" {
 ///|
 test "parser reports distinct resource limits" {
   assert_true(@moonuritemplate.parse("abc", max_length=2) is Err(InputTooLong))
-  assert_true(@moonuritemplate.parse("{x}{y}", max_expressions=1) is Err(TooManyExpressions))
-  assert_true(@moonuritemplate.parse("{x,y}", max_variables=1) is Err(TooManyVariables))
+  assert_true(
+    @moonuritemplate.parse("{x}{y}", max_expressions=1)
+    is Err(TooManyExpressions),
+  )
+  assert_true(
+    @moonuritemplate.parse("{x,y}", max_variables=1) is Err(TooManyVariables),
+  )
 }
 
 ///|

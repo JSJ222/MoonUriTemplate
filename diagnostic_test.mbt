@@ -16,12 +16,22 @@ test "single-use API keeps the parse or expansion error kind" {
     ("x", Scalar("one")),
     ("x", Scalar("two")),
   ]
-  assert_true(@moonuritemplate.expand("{x}", duplicate) is Err(Expand(DuplicateVariable(_))))
+  assert_true(
+    @moonuritemplate.expand("{x}", duplicate)
+    is Err(Expand(DuplicateVariable(_))),
+  )
 }
 
 ///|
 test "invalid composite prefix and output limit are explicit errors" {
-  let values : Array[(String, @moonuritemplate.Value)] = [("x", List(["a", "b"]))]
-  assert_true(@moonuritemplate.expand("{x:2}", values) is Err(Expand(InvalidValue(_))))
-  assert_true(@moonuritemplate.expand("/{x}", [("x", Scalar("value"))], max_output=3) is Err(Expand(OutputTooLong)))
+  let values : Array[(String, @moonuritemplate.Value)] = [
+    ("x", List(["a", "b"])),
+  ]
+  assert_true(
+    @moonuritemplate.expand("{x:2}", values) is Err(Expand(InvalidValue(_))),
+  )
+  assert_true(
+    @moonuritemplate.expand("/{x}", [("x", Scalar("value"))], max_output=3)
+    is Err(Expand(OutputTooLong)),
+  )
 }

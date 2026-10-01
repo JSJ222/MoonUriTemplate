@@ -19,7 +19,7 @@ repository = "https://github.com/oyjh0381/MoonUriTemplate"
 
 license = "Apache-2.0"
 
-keywords = ["uri-template", "rfc6570", "url", "api", "mcp"]
+keywords = [ "uri-template", "rfc6570", "url", "api", "mcp" ]
 
 preferred_target = "wasm-gc"
 

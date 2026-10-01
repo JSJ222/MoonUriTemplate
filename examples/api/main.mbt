@@ -1,9 +1,13 @@
 ///|
 /// An API client expands path and optional query parameters at call time.
 fn main {
-  let template = match @uri_template.parse("https://api.example.test/users/{id}{?fields*,limit}") {
+  let template = match
+    @uri_template.parse("https://api.example.test/users/{id}{?fields*,limit}") {
     Ok(value) => value
-    Err(error) => { println(error.message()); return }
+    Err(error) => {
+      println(error.message())
+      return
+    }
   }
   let values : Array[(String, @uri_template.Value)] = [
     ("id", Scalar("team/a")),

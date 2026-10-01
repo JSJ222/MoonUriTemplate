@@ -80,6 +80,14 @@ test "RFC 6570 prefix and composite values" {
 
 ///|
 test "Unicode scalar prefix and UTF-8 percent encoding" {
-  check_expansion("{word:2}", [("word", Scalar("😀中A"))], "%F0%9F%98%80%E4%B8%AD")
-  check_expansion("/城市/{name}", [("name", Scalar("北京"))], "/%E5%9F%8E%E5%B8%82/%E5%8C%97%E4%BA%AC")
+  check_expansion(
+    "{word:2}",
+    [("word", Scalar("😀中A"))],
+    "%F0%9F%98%80%E4%B8%AD",
+  )
+  check_expansion(
+    "/城市/{name}",
+    [("name", Scalar("北京"))],
+    "/%E5%9F%8E%E5%B8%82/%E5%8C%97%E4%BA%AC",
+  )
 }

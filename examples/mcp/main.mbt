@@ -3,7 +3,10 @@
 fn main {
   let template = match @uri_template.parse("repo://{org}/{project}{/path*}") {
     Ok(value) => value
-    Err(error) => { println(error.message()); return }
+    Err(error) => {
+      println(error.message())
+      return
+    }
   }
   let values : Array[(String, @uri_template.Value)] = [
     ("org", Scalar("moonbit")),

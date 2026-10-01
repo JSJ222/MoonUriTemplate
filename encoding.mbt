@@ -1,6 +1,10 @@
 ///|
 fn hex_digit(value : Int) -> Char {
-  if value < 10 { (48 + value).unsafe_to_char() } else { (55 + value).unsafe_to_char() }
+  if value < 10 {
+    (48 + value).unsafe_to_char()
+  } else {
+    (55 + value).unsafe_to_char()
+  }
 }
 
 ///|
@@ -21,8 +25,11 @@ fn encode_value(input : String, allow_reserved : Bool) -> String {
     let code = bytes[i].to_int()
     if is_unreserved(code) || (allow_reserved && is_reserved(code)) {
       out.write_char(code.unsafe_to_char())
-    } else if allow_reserved && code == 37 && i + 2 < bytes.length() &&
-      is_hex(bytes[i + 1].to_int()) && is_hex(bytes[i + 2].to_int()) {
+    } else if allow_reserved &&
+      code == 37 &&
+      i + 2 < bytes.length() &&
+      is_hex(bytes[i + 1].to_int()) &&
+      is_hex(bytes[i + 2].to_int()) {
       out.write_char('%')
       out.write_char(bytes[i + 1].to_int().unsafe_to_char())
       out.write_char(bytes[i + 2].to_int().unsafe_to_char())
@@ -65,9 +72,14 @@ fn hex_value(code : Int) -> Int {
 
 ///|
 fn triplet_byte(value : String, start : Int) -> Int? {
-  if start + 2 < value.length() && value[start].to_int() == 37 &&
-    is_hex(value[start + 1].to_int()) && is_hex(value[start + 2].to_int()) {
-    Some(hex_value(value[start + 1].to_int()) * 16 + hex_value(value[start + 2].to_int()))
+  if start + 2 < value.length() &&
+    value[start].to_int() == 37 &&
+    is_hex(value[start + 1].to_int()) &&
+    is_hex(value[start + 2].to_int()) {
+    Some(
+      hex_value(value[start + 1].to_int()) * 16 +
+      hex_value(value[start + 2].to_int()),
+    )
   } else {
     None
   }
@@ -125,7 +137,11 @@ fn scalar_prefix(value : String, length : Int) -> String {
     let unit = value[index].to_int()
     if unit == 37 {
       match encoded_character_end(value, index) {
-        Some(end) => { index = end; count += 1; continue }
+        Some(end) => {
+          index = end
+          count += 1
+          continue
+        }
         None => ()
       }
     }

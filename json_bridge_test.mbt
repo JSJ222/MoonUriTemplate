@@ -11,7 +11,8 @@ test "JSON bridge sorts object keys and omits null members" {
     Err(_) => fail("JSON conversion")
   }
   assert_eq(bindings.length(), 3)
-  let template = match @moonuritemplate.parse("/users/{id}{?fields*,options*}") {
+  let template = match
+    @moonuritemplate.parse("/users/{id}{?fields*,options*}") {
     Ok(value) => value
     Err(_) => fail("parse")
   }

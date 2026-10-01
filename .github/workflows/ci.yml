@@ -1,0 +1,42 @@
+name: MoonBit CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: hustcer/setup-moonbit@v1.23
+      - name: Toolchain
+        run: moon version --all
+      - name: Resolve dependencies
+        run: moon update
+      - name: Regenerate conformance tests
+        run: |
+          python tools/generate_conformance.py
+          moon fmt
+          git diff --exit-code
+      - name: Formatting
+        run: moon fmt --check
+      - name: Check all backends
+        run: moon check --target all --deny-warn
+      - name: Build all backends
+        run: moon build --target all --deny-warn
+      - name: Test all backends
+        run: moon test --target all --deny-warn
+      - name: Run API example
+        run: moon run examples/api --target wasm-gc
+      - name: Run MCP example
+        run: moon run examples/mcp --target wasm-gc
+      - name: Run hypermedia example
+        run: moon run examples/hypermedia --target wasm-gc

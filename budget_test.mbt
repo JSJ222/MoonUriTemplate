@@ -22,7 +22,9 @@ test "bounded expansion checks binding count and individual value length" {
     ("unused", Scalar("z")),
   ]
   assert_true(template.expand(values, max_bindings=1) is Err(TooManyBindings))
-  assert_true(template.expand(values, max_value_length=2) is Err(ValueTooLong(_)))
+  assert_true(
+    template.expand(values, max_value_length=2) is Err(ValueTooLong(_)),
+  )
 }
 
 ///|

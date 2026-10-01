@@ -47,7 +47,8 @@ pub fn BindingIssue::code(self : BindingIssue) -> String {
 ///|
 pub fn BindingIssue::name(self : BindingIssue) -> String {
   match self {
-    Missing(name) | Unused(name) | Duplicate(name) | CompositePrefix(name) => name
+    Missing(name) | Unused(name) | Duplicate(name) | CompositePrefix(name) =>
+      name
   }
 }
 
@@ -84,23 +85,24 @@ pub fn Template::inspect_bindings(
   for segment in self.segments {
     match segment {
       Literal(_) => ()
-      Expression(_, specs, _, _) => for spec in specs {
-        if spec.prefix is Some(_) && !reported.contains(spec.name) {
-          for binding in bindings {
-            let (name, value) = binding
-            if name == spec.name {
-              match value {
-                Scalar(_) => ()
-                _ => {
-                  issues.push(CompositePrefix(name))
-                  reported[name] = true
+      Expression(_, specs, _, _) =>
+        for spec in specs {
+          if spec.prefix is Some(_) && !reported.contains(spec.name) {
+            for binding in bindings {
+              let (name, value) = binding
+              if name == spec.name {
+                match value {
+                  Scalar(_) => ()
+                  _ => {
+                    issues.push(CompositePrefix(name))
+                    reported[name] = true
+                  }
                 }
+                break
               }
-              break
             }
           }
         }
-      }
     }
   }
   { issues, }

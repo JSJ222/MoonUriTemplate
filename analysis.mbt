@@ -31,7 +31,9 @@ pub struct TemplateAnalysis {
 }
 
 ///|
-pub fn TemplateAnalysis::expressions(self : TemplateAnalysis) -> Array[ExpressionInfo] {
+pub fn TemplateAnalysis::expressions(
+  self : TemplateAnalysis,
+) -> Array[ExpressionInfo] {
   self.expressions.copy()
 }
 
@@ -48,7 +50,9 @@ pub fn TemplateAnalysis::max_level(self : TemplateAnalysis) -> Int {
 
 ///|
 /// True if '+' or '#' allows reserved characters from a value into the URI.
-pub fn TemplateAnalysis::has_reserved_expansion(self : TemplateAnalysis) -> Bool {
+pub fn TemplateAnalysis::has_reserved_expansion(
+  self : TemplateAnalysis,
+) -> Bool {
   self.has_reserved_expansion
 }
 
@@ -119,7 +123,7 @@ pub fn Template::analyze(self : Template) -> TemplateAnalysis {
       }
     }
   }
-  { expressions, uses, max_level, has_reserved_expansion: has_reserved }
+  { expressions, uses, max_level, has_reserved_expansion: has_reserved, }
 }
 
 ///|
