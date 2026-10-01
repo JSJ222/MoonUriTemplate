@@ -4,6 +4,8 @@ pub(all) enum Value {
   Scalar(String)
   List(Array[String])
   Assoc(Array[(String, String)])
+  SparseList(Array[String?])
+  SparseAssoc(Array[(String, String?)])
 }
 
 ///|

@@ -60,6 +60,28 @@ fn valid_value(value : Value) -> Bool {
       }
       true
     }
+    SparseList(items) => {
+      for item in items {
+        match item {
+          Some(text) => if first_invalid_utf16(text) is Some(_) { return false }
+          None => ()
+        }
+      }
+      true
+    }
+    SparseAssoc(entries) => {
+      for entry in entries {
+        let (name, item) = entry
+        if first_invalid_utf16(name) is Some(_) {
+          return false
+        }
+        match item {
+          Some(text) => if first_invalid_utf16(text) is Some(_) { return false }
+          None => ()
+        }
+      }
+      true
+    }
   }
 }
 
@@ -217,6 +239,27 @@ fn expand_variable(
         }
         Ok([named_piece(op, spec.name, join_text(encoded, ","))])
       }
+    }
+    SparseList(items) => {
+      let defined : Array[String] = []
+      for item in items {
+        match item {
+          Some(text) => defined.push(text)
+          None => ()
+        }
+      }
+      expand_variable(op, spec, List(defined))
+    }
+    SparseAssoc(entries) => {
+      let defined : Array[(String, String)] = []
+      for entry in entries {
+        let (name, item) = entry
+        match item {
+          Some(text) => defined.push((name, text))
+          None => ()
+        }
+      }
+      expand_variable(op, spec, Assoc(defined))
     }
   }
 }
