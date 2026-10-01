@@ -5,9 +5,15 @@ pub fn Template::expand(
   self : Template,
   bindings : Array[(String, Value)],
   max_output? : Int = 1048576,
+  max_bindings? : Int = 4096,
+  max_value_length? : Int = 1048576,
+  max_items? : Int = 4096,
 ) -> Result[String, ExpandError] {
   if max_output < 0 {
     return Err(OutputTooLong)
+  }
+  if max_bindings < 0 || bindings.length() > max_bindings {
+    return Err(TooManyBindings)
   }
   let values : Map[String, Value] = Map([])
   for binding in bindings {
@@ -15,8 +21,9 @@ pub fn Template::expand(
     if values.contains(name) {
       return Err(DuplicateVariable(name))
     }
-    if !valid_value(value) {
-      return Err(InvalidValue(name))
+    match check_value(value, name, max_value_length, max_items) {
+      Ok(_) => ()
+      Err(error) => return Err(error)
     }
     values[name] = value
   }
@@ -25,7 +32,7 @@ pub fn Template::expand(
   for segment in self.segments {
     let text = match segment {
       Literal(raw) => encode_literal(raw)
-      Expression(op, specs) => match expand_expression(op, specs, values) {
+      Expression(op, specs) => match expand_expression(op, specs, values, max_output - used) {
         Ok(text) => text
         Err(error) => return Err(error)
       }
@@ -40,47 +47,92 @@ pub fn Template::expand(
 }
 
 ///|
-fn valid_value(value : Value) -> Bool {
+fn check_text(
+  text : String,
+  name : String,
+  max_value_length : Int,
+) -> Result[Unit, ExpandError] {
+  if max_value_length < 0 || text.length() > max_value_length {
+    Err(ValueTooLong(name))
+  } else if first_invalid_utf16(text) is Some(_) {
+    Err(InvalidValue(name))
+  } else {
+    Ok(())
+  }
+}
+
+///|
+fn check_value(
+  value : Value,
+  name : String,
+  max_value_length : Int,
+  max_items : Int,
+) -> Result[Unit, ExpandError] {
   match value {
-    Scalar(text) => first_invalid_utf16(text) is None
+    Scalar(text) => check_text(text, name, max_value_length)
     List(items) => {
+      if max_items < 0 || items.length() > max_items {
+        return Err(TooManyItems(name))
+      }
       for item in items {
-        if first_invalid_utf16(item) is Some(_) {
-          return false
+        match check_text(item, name, max_value_length) {
+          Ok(_) => ()
+          Err(error) => return Err(error)
         }
       }
-      true
+      Ok(())
     }
     Assoc(entries) => {
+      if max_items < 0 || entries.length() > max_items {
+        return Err(TooManyItems(name))
+      }
       for entry in entries {
-        let (name, item) = entry
-        if first_invalid_utf16(name) is Some(_) || first_invalid_utf16(item) is Some(_) {
-          return false
+        let (key, item) = entry
+        match check_text(key, name, max_value_length) {
+          Ok(_) => ()
+          Err(error) => return Err(error)
+        }
+        match check_text(item, name, max_value_length) {
+          Ok(_) => ()
+          Err(error) => return Err(error)
         }
       }
-      true
+      Ok(())
     }
     SparseList(items) => {
+      if max_items < 0 || items.length() > max_items {
+        return Err(TooManyItems(name))
+      }
       for item in items {
         match item {
-          Some(text) => if first_invalid_utf16(text) is Some(_) { return false }
+          Some(text) => match check_text(text, name, max_value_length) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
           None => ()
         }
       }
-      true
+      Ok(())
     }
     SparseAssoc(entries) => {
+      if max_items < 0 || entries.length() > max_items {
+        return Err(TooManyItems(name))
+      }
       for entry in entries {
-        let (name, item) = entry
-        if first_invalid_utf16(name) is Some(_) {
-          return false
+        let (key, item) = entry
+        match check_text(key, name, max_value_length) {
+          Ok(_) => ()
+          Err(error) => return Err(error)
         }
         match item {
-          Some(text) => if first_invalid_utf16(text) is Some(_) { return false }
+          Some(text) => match check_text(text, name, max_value_length) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
           None => ()
         }
       }
-      true
+      Ok(())
     }
   }
 }
@@ -140,25 +192,61 @@ fn join_text(parts : Array[String], separator : String) -> String {
 }
 
 ///|
+priv struct PieceBuffer {
+  pieces : Array[String]
+  separator : String
+  limit : Int
+  mut used : Int
+}
+
+///|
+fn PieceBuffer::new(separator : String, limit : Int) -> PieceBuffer {
+  { pieces: [], separator, limit, used: 0 }
+}
+
+///|
+fn PieceBuffer::push(self : PieceBuffer, piece : String) -> Result[Unit, ExpandError] {
+  let extra = if self.pieces.is_empty() { 0 } else { self.separator.length() }
+  if self.used > self.limit - extra || piece.length() > self.limit - extra - self.used {
+    return Err(OutputTooLong)
+  }
+  self.pieces.push(piece)
+  self.used += extra + piece.length()
+  Ok(())
+}
+
+///|
+fn PieceBuffer::join(self : PieceBuffer) -> String {
+  join_text(self.pieces, self.separator)
+}
+
+///|
 fn expand_expression(
   op : Operator,
   specs : Array[VarSpec],
   values : Map[String, Value],
+  limit : Int,
 ) -> Result[String, ExpandError] {
-  let pieces : Array[String] = []
+  let prefix = operator_prefix(op)
+  let pieces = PieceBuffer::new(operator_separator(op), limit - prefix.length())
   for spec in specs {
     match values.get(spec.name) {
       None => ()
-      Some(value) => match expand_variable(op, spec, value) {
-        Ok(items) => for item in items { pieces.push(item) }
+      Some(value) => match expand_variable(op, spec, value, limit) {
+        Ok(items) => for item in items {
+          match pieces.push(item) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
+        }
         Err(error) => return Err(error)
       }
     }
   }
-  if pieces.is_empty() {
+  if pieces.pieces.is_empty() {
     Ok("")
   } else {
-    Ok(operator_prefix(op) + join_text(pieces, operator_separator(op)))
+    Ok(prefix + pieces.join())
   }
 }
 
@@ -179,6 +267,7 @@ fn expand_variable(
   op : Operator,
   spec : VarSpec,
   value : Value,
+  limit : Int,
 ) -> Result[Array[String], ExpandError] {
   let reserved = operator_allows_reserved(op)
   match value {
@@ -187,7 +276,8 @@ fn expand_variable(
         None => raw
         Some(length) => scalar_prefix(raw, length)
       }
-      Ok([named_piece(op, spec.name, encode_value(selected, reserved))])
+      let piece = named_piece(op, spec.name, encode_value(selected, reserved))
+      if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
     }
     List(items) => {
       if spec.prefix is Some(_) {
@@ -197,17 +287,24 @@ fn expand_variable(
         return Ok([])
       }
       if spec.explode {
-        let pieces : Array[String] = []
+        let pieces = PieceBuffer::new(operator_separator(op), limit)
         for item in items {
-          pieces.push(named_piece(op, spec.name, encode_value(item, reserved)))
+          match pieces.push(named_piece(op, spec.name, encode_value(item, reserved))) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
         }
-        Ok(pieces)
+        Ok(pieces.pieces)
       } else {
-        let encoded : Array[String] = []
+        let encoded = PieceBuffer::new(",", limit)
         for item in items {
-          encoded.push(encode_value(item, reserved))
+          match encoded.push(encode_value(item, reserved)) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
         }
-        Ok([named_piece(op, spec.name, join_text(encoded, ","))])
+        let piece = named_piece(op, spec.name, encoded.join())
+        if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
       }
     }
     Assoc(entries) => {
@@ -218,26 +315,37 @@ fn expand_variable(
         return Ok([])
       }
       if spec.explode {
-        let pieces : Array[String] = []
+        let pieces = PieceBuffer::new(operator_separator(op), limit)
         for entry in entries {
           let (name, item) = entry
           let key = encode_value(name, reserved)
           let encoded = encode_value(item, reserved)
-          if encoded == "" && !operator_form(op) {
-            pieces.push(key)
+          let piece = if encoded == "" && !operator_form(op) {
+            key
           } else {
-            pieces.push(key + "=" + encoded)
+            key + "=" + encoded
+          }
+          match pieces.push(piece) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
           }
         }
-        Ok(pieces)
+        Ok(pieces.pieces)
       } else {
-        let encoded : Array[String] = []
+        let encoded = PieceBuffer::new(",", limit)
         for entry in entries {
           let (name, item) = entry
-          encoded.push(encode_value(name, reserved))
-          encoded.push(encode_value(item, reserved))
+          match encoded.push(encode_value(name, reserved)) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
+          match encoded.push(encode_value(item, reserved)) {
+            Ok(_) => ()
+            Err(error) => return Err(error)
+          }
         }
-        Ok([named_piece(op, spec.name, join_text(encoded, ","))])
+        let piece = named_piece(op, spec.name, encoded.join())
+        if piece.length() > limit { Err(OutputTooLong) } else { Ok([piece]) }
       }
     }
     SparseList(items) => {
@@ -248,7 +356,7 @@ fn expand_variable(
           None => ()
         }
       }
-      expand_variable(op, spec, List(defined))
+      expand_variable(op, spec, List(defined), limit)
     }
     SparseAssoc(entries) => {
       let defined : Array[(String, String)] = []
@@ -259,7 +367,7 @@ fn expand_variable(
           None => ()
         }
       }
-      expand_variable(op, spec, Assoc(defined))
+      expand_variable(op, spec, Assoc(defined), limit)
     }
   }
 }

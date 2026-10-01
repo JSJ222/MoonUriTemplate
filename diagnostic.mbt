@@ -51,6 +51,9 @@ pub fn ExpandError::code(self : ExpandError) -> String {
   match self {
     DuplicateVariable(_) => "duplicate_variable"
     InvalidValue(_) => "invalid_value"
+    TooManyBindings => "too_many_bindings"
+    ValueTooLong(_) => "value_too_long"
+    TooManyItems(_) => "too_many_items"
     OutputTooLong => "output_too_long"
   }
 }
@@ -61,6 +64,9 @@ pub fn ExpandError::message(self : ExpandError) -> String {
   match self {
     DuplicateVariable(name) => "duplicate binding for variable " + name
     InvalidValue(name) => "invalid value for variable " + name
+    TooManyBindings => "too many variable bindings"
+    ValueTooLong(name) => "value exceeds the length limit for variable " + name
+    TooManyItems(name) => "composite value has too many items for variable " + name
     OutputTooLong => "expansion exceeds the configured output limit"
   }
 }

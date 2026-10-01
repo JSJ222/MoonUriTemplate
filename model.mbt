@@ -29,6 +29,9 @@ pub(all) enum ParseError {
 pub(all) enum ExpandError {
   DuplicateVariable(String)
   InvalidValue(String)
+  TooManyBindings
+  ValueTooLong(String)
+  TooManyItems(String)
   OutputTooLong
 }
 
