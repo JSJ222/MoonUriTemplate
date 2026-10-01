@@ -22,6 +22,11 @@ test "spec-examples.json: Level 1 Examples" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -51,6 +56,11 @@ test "spec-examples.json: Level 2 Examples" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -95,6 +105,11 @@ test "spec-examples.json: Level 3 Examples" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -253,6 +268,11 @@ test "spec-examples.json: Level 4 Examples" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -277,6 +297,11 @@ test "spec-examples-by-section.json: 2.1 Literals" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -324,6 +349,11 @@ test "spec-examples-by-section.json: 3.2.1 Variable Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -390,6 +420,11 @@ test "spec-examples-by-section.json: 3.2.2 Simple String Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -459,6 +494,11 @@ test "spec-examples-by-section.json: 3.2.3 Reserved Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -514,6 +554,11 @@ test "spec-examples-by-section.json: 3.2.4 Fragment Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -578,6 +623,11 @@ test "spec-examples-by-section.json: 3.2.5 Label Expansion with Dot-Prefix" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -642,6 +692,11 @@ test "spec-examples-by-section.json: 3.2.6 Path Segment Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -705,6 +760,11 @@ test "spec-examples-by-section.json: 3.2.7 Path-Style Parameter Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -765,6 +825,11 @@ test "spec-examples-by-section.json: 3.2.8 Form-Style Query Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -825,6 +890,11 @@ test "spec-examples-by-section.json: 3.2.9 Form-Style Query Continuation" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -925,6 +995,11 @@ test "extended-tests.json: Additional Examples 1" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -961,6 +1036,11 @@ test "extended-tests.json: Additional Examples 2" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -991,6 +1071,11 @@ test "extended-tests.json: Additional Examples 3: Empty Variables" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -1036,6 +1121,11 @@ test "extended-tests.json: Additional Examples 4: Numeric Keys" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -1086,6 +1176,11 @@ test "extended-tests.json: Additional Examples 5: Explode Combinations" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -1124,6 +1219,11 @@ test "extended-tests.json: Additional Examples 6: Reserved Expansion" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -1158,6 +1258,11 @@ test "extended-tests.json: Additional Examples 7: Prefix Modifiers with Multibyt
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
@@ -1184,6 +1289,11 @@ test "extended-tests.json: Additional Examples 8: Literal Encoding" {
       Ok(value) => value
       Err(_) => fail("cannot expand fixture: " + source)
     }
+    let measured = match template.measure(bindings) {
+      Ok(value) => value
+      Err(_) => fail("cannot measure fixture: " + source)
+    }
+    assert_eq(measured, output.length())
     if !alternatives.contains(output) {
       fail("fixture mismatch: " + source + " => " + output)
     }
