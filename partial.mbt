@@ -68,6 +68,25 @@ pub fn BoundTemplate::expand(
   max_value_length? : Int = 1048576,
   max_items? : Int = 4096,
 ) -> Result[String, ExpandError] {
+  let combined = match self.combine(dynamic, max_bindings) {
+    Ok(value) => value
+    Err(error) => return Err(error)
+  }
+  self.template.expand(
+    combined,
+    max_output~,
+    max_bindings~,
+    max_value_length~,
+    max_items~,
+  )
+}
+
+///|
+fn BoundTemplate::combine(
+  self : BoundTemplate,
+  dynamic : Array[(String, Value)],
+  max_bindings : Int,
+) -> Result[Array[(String, Value)], ExpandError] {
   if max_bindings < 0 ||
     self.fixed.length() > max_bindings ||
     dynamic.length() > max_bindings - self.fixed.length() {
@@ -81,7 +100,24 @@ pub fn BoundTemplate::expand(
     }
     combined.push(binding)
   }
-  self.template.expand(
+  Ok(combined)
+}
+
+///|
+/// Measure a partially bound expansion before constructing its URI text.
+pub fn BoundTemplate::measure(
+  self : BoundTemplate,
+  dynamic : Array[(String, Value)],
+  max_output? : Int = 1048576,
+  max_bindings? : Int = 4096,
+  max_value_length? : Int = 1048576,
+  max_items? : Int = 4096,
+) -> Result[Int, ExpandError] {
+  let combined = match self.combine(dynamic, max_bindings) {
+    Ok(value) => value
+    Err(error) => return Err(error)
+  }
+  self.template.measure(
     combined,
     max_output~,
     max_bindings~,

@@ -22,6 +22,11 @@ test "partially bound template combines tenant and request values" {
     Err(_) => fail("expand")
   }
   assert_eq(output, "/tenants/alpha%2Fbeta/users/42?fields=name&fields=email")
+  let measured = match bound.measure(dynamic) {
+    Ok(value) => value
+    Err(_) => fail("measure bound URI")
+  }
+  assert_eq(measured, output.length())
 }
 
 ///|
@@ -83,5 +88,6 @@ test "partially bound template applies combined binding and output budgets" {
   let dynamic : Array[(String, @moonuritemplate.Value)] = [("b", Scalar("b"))]
   assert_true(bound.expand(dynamic, max_bindings=1) is Err(TooManyBindings))
   assert_true(bound.expand(dynamic, max_output=1) is Err(OutputTooLong))
+  assert_true(bound.measure(dynamic, max_output=1) is Err(OutputTooLong))
   assert_true(template.bind(fixed, max_bindings=0) is Err(TooManyBindings))
 }
