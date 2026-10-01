@@ -4,6 +4,8 @@ Pure MoonBit RFC 6570 Level 4 URI Template parser and expander for wasm, wasm-gc
 
 Compile a template once, then expand it with typed scalar, list, or ordered associative values. The library supports all eight defined operators, prefix and explode modifiers, UTF-8 percent encoding, sparse composites, bounded processing, source-aware analysis, binding preflight, and a conservative JSON bridge.
 
+Reusable catalogs, partial bindings, batch rendering, source-to-output spans, variable profiles, and opt-in template policies support SDK generators and hypermedia services. Every API returns typed errors; network destination validation remains the caller's responsibility.
+
 Run from a source checkout:
 
 ```sh

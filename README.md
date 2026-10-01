@@ -39,6 +39,10 @@ let values : Array[(String, @uri_template.Value)] = [
 
 完整、可直接执行的错误处理见 [examples/api/main.mbt](examples/api/main.mbt)。编译一次模板可反复调用 `Template::expand`；只用一次时可调用 `expand(source, values)`，返回区分解析和展开阶段的 `TemplateError`。`Template::variables`、`Template::analyze` 和 `Template::inspect_bindings` 可用于 SDK 预检。`bindings_from_json` 将只含字符串、null、字符串数组和字符串对象的 JSON 树转换为确定性绑定；它拒绝数字和布尔值的隐式字符串化。
 
+批量链接生成可调用 `Template::expand_many`，为每行使用同一个编译结果并设置单行与总输出限额。`Template::bind` 将常用的租户或 API 前缀变量固定为 `BoundTemplate`；捕获时复制复合值，避免调用方后续修改数组影响结果。命名端点集合可通过 `compile_catalog` 一次编译，重复名称会报错。
+
+对固定 SDK 操作，`Template::expand_required` 可要求每个变量均有绑定，并可拒绝未使用参数；普通 `expand` 仍遵循 RFC 6570 的未定义变量省略语义。`Template::variable_profiles` 提供每个变量的标量限制、修饰符和使用次数，`Template::check_policy` 可预检保留字符、片段、特性级别及重复引用。`Template::expand_detailed` 返回每个源段对应的输出位置，供编辑器和诊断工具定位。已有 JSON 树可直接交给 `Template::expand_json`。
+
 ## 语义与边界
 
 - 默认解析模式按 RFC 6570 字面量语法检查 Unicode、括号、变量名和修饰符。公开测试集中有一条包含模板外单引号的历史样例，与规范的字面量 ABNF 不一致；`strict_literals=false` 仅为这类兼容输入开放。
