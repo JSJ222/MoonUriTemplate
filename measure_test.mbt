@@ -60,3 +60,38 @@ test "measurement checks malformed bindings before output" {
     template.measure([], max_items=-1) is Err(InvalidLimit("max_items")),
   )
 }
+
+///|
+test "measurement and rendering agree on absent and empty composites" {
+  let sources = ["{x}", "{?x}", "{?x*}", "{;x}", "{;x*}", "{#x}"]
+  let values : Array[@moonuritemplate.Value] = [
+    List([]),
+    Assoc([]),
+    SparseList([None, None]),
+    SparseAssoc([("a", None), ("b", None)]),
+  ]
+  for source in sources {
+    let template = match @moonuritemplate.parse(source) {
+      Ok(value) => value
+      Err(_) => fail("parse")
+    }
+    let absent_length = match template.measure([]) {
+      Ok(value) => value
+      Err(_) => fail("absent measure")
+    }
+    assert_eq(absent_length, 0)
+    for value in values {
+      let bindings : Array[(String, @moonuritemplate.Value)] = [("x", value)]
+      let output = match template.expand(bindings, max_output=0) {
+        Ok(value) => value
+        Err(_) => fail("empty composite render")
+      }
+      let measured = match template.measure(bindings, max_output=0) {
+        Ok(value) => value
+        Err(_) => fail("empty composite measure")
+      }
+      assert_eq(output, "")
+      assert_eq(measured, 0)
+    }
+  }
+}
