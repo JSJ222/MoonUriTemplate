@@ -31,6 +31,13 @@ pub(all) enum ExpandError {
 }
 
 ///|
+/// A single-use expansion failed while parsing or while applying values.
+pub(all) enum TemplateError {
+  Parse(ParseError)
+  Expand(ExpandError)
+}
+
+///|
 pub enum Segment {
   Literal(String)
   Expression(Operator, Array[VarSpec])

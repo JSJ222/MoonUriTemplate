@@ -16,6 +16,7 @@ pub fn parse(
   }
   let segments : Array[Segment] = []
   let variables : Array[String] = []
+  let seen_variables : Map[String, Bool] = Map([])
   let mut i = 0
   let mut literal_start = 0
   let mut expressions = 0
@@ -54,14 +55,8 @@ pub fn parse(
         return Err(TooManyVariables)
       }
       for spec in expression.1 {
-        let mut seen = false
-        for name in variables {
-          if name == spec.name {
-            seen = true
-            break
-          }
-        }
-        if !seen {
+        if !seen_variables.contains(spec.name) {
+          seen_variables[spec.name] = true
           variables.push(spec.name)
         }
       }

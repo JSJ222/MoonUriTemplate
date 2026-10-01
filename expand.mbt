@@ -40,23 +40,6 @@ pub fn Template::expand(
 }
 
 ///|
-/// Parse and expand in one call for single-use templates.
-pub fn expand(
-  source : String,
-  bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
-) -> Result[String, String] {
-  let template = match parse(source) {
-    Ok(template) => template
-    Err(_) => return Err("invalid template")
-  }
-  match template.expand(bindings, max_output~) {
-    Ok(text) => Ok(text)
-    Err(_) => Err("expansion failed")
-  }
-}
-
-///|
 fn valid_value(value : Value) -> Bool {
   match value {
     Scalar(text) => first_invalid_utf16(text) is None
