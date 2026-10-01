@@ -61,7 +61,7 @@ pub fn parse(
           variables.push(spec.name)
         }
       }
-      segments.push(Expression(expression.0, expression.1))
+      segments.push(Expression(expression.0, expression.1, start, i + 1))
       i += 1
       literal_start = i
     } else if unit == 125 {
@@ -263,5 +263,5 @@ fn parse_varspec(
   if i < end && input[i].to_int() != 44 {
     return Err(InvalidModifier(i))
   }
-  Ok(({ name, prefix, explode }, i))
+  Ok(({ name, prefix, explode, start, end: i }, i))
 }

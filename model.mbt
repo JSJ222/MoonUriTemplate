@@ -45,7 +45,7 @@ pub(all) enum TemplateError {
 ///|
 pub enum Segment {
   Literal(String)
-  Expression(Operator, Array[VarSpec])
+  Expression(Operator, Array[VarSpec], Int, Int)
 }
 
 ///|
@@ -65,6 +65,8 @@ pub struct VarSpec {
   name : String
   prefix : Int?
   explode : Bool
+  start : Int
+  end : Int
 }
 
 ///|

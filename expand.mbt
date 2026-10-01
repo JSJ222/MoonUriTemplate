@@ -32,7 +32,7 @@ pub fn Template::expand(
   for segment in self.segments {
     let text = match segment {
       Literal(raw) => encode_literal(raw)
-      Expression(op, specs) => match expand_expression(op, specs, values, max_output - used) {
+      Expression(op, specs, _, _) => match expand_expression(op, specs, values, max_output - used) {
         Ok(text) => text
         Err(error) => return Err(error)
       }
