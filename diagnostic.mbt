@@ -56,6 +56,8 @@ pub fn ParseError::message(self : ParseError) -> String {
 pub fn ExpandError::code(self : ExpandError) -> String {
   match self {
     DuplicateVariable(_) => "duplicate_variable"
+    MissingVariable(_) => "missing_variable"
+    UnusedVariable(_) => "unused_variable"
     InvalidValue(_) => "invalid_value"
     TooManyBindings => "too_many_bindings"
     ValueTooLong(_) => "value_too_long"
@@ -69,6 +71,8 @@ pub fn ExpandError::code(self : ExpandError) -> String {
 pub fn ExpandError::message(self : ExpandError) -> String {
   match self {
     DuplicateVariable(name) => "duplicate binding for variable " + name
+    MissingVariable(name) => "missing binding for variable " + name
+    UnusedVariable(name) => "binding is not used by template: " + name
     InvalidValue(name) => "invalid value for variable " + name
     TooManyBindings => "too many variable bindings"
     ValueTooLong(name) => "value exceeds the length limit for variable " + name

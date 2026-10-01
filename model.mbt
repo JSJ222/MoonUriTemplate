@@ -28,6 +28,8 @@ pub(all) enum ParseError {
 /// An expansion failure. The requested output limit is enforced before return.
 pub(all) enum ExpandError {
   DuplicateVariable(String)
+  MissingVariable(String)
+  UnusedVariable(String)
   InvalidValue(String)
   TooManyBindings
   ValueTooLong(String)
