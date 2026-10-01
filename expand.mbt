@@ -31,6 +31,12 @@ fn Template::expand_internal(
   if max_output < 0 {
     return Err(OutputTooLong)
   }
+  if max_value_length < 0 {
+    return Err(InvalidLimit("max_value_length"))
+  }
+  if max_items < 0 {
+    return Err(InvalidLimit("max_items"))
+  }
   if max_bindings < 0 || bindings.length() > max_bindings {
     return Err(TooManyBindings)
   }

@@ -62,6 +62,7 @@ pub fn ExpandError::code(self : ExpandError) -> String {
     TooManyBindings => "too_many_bindings"
     ValueTooLong(_) => "value_too_long"
     TooManyItems(_) => "too_many_items"
+    InvalidLimit(_) => "invalid_limit"
     OutputTooLong => "output_too_long"
   }
 }
@@ -78,6 +79,7 @@ pub fn ExpandError::message(self : ExpandError) -> String {
     ValueTooLong(name) => "value exceeds the length limit for variable " + name
     TooManyItems(name) =>
       "composite value has too many items for variable " + name
+    InvalidLimit(name) => "resource limit must be nonnegative: " + name
     OutputTooLong => "expansion exceeds the configured output limit"
   }
 }

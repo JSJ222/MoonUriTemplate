@@ -34,6 +34,7 @@ pub(all) enum ExpandError {
   TooManyBindings
   ValueTooLong(String)
   TooManyItems(String)
+  InvalidLimit(String)
   OutputTooLong
 }
 

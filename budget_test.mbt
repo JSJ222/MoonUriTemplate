@@ -49,3 +49,18 @@ test "empty expansion fits a zero-sized output budget" {
   let result = template.expand([], max_output=0)
   assert_true(result is Ok(""))
 }
+
+///|
+test "negative value and item budgets fail even without bindings" {
+  let template = match @moonuritemplate.parse("") {
+    Ok(value) => value
+    Err(_) => fail("parse")
+  }
+  assert_true(
+    template.expand([], max_value_length=-1)
+    is Err(InvalidLimit("max_value_length")),
+  )
+  assert_true(
+    template.expand([], max_items=-1) is Err(InvalidLimit("max_items")),
+  )
+}
