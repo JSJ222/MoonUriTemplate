@@ -20,6 +20,11 @@ test "catalog expands named API and link templates" {
     Err(_) => fail("expand")
   }
   assert_eq(output, "/users/a%2Fb?fields=name&fields=email")
+  let measured = match catalog.measure("user", bindings) {
+    Ok(value) => value
+    Err(_) => fail("measure catalog entry")
+  }
+  assert_eq(measured, output.length())
   assert_true(catalog.get("order") is Some(_))
 }
 
@@ -63,6 +68,10 @@ test "catalog distinguishes unknown entry from expansion error" {
   let values : Array[(String, @moonuritemplate.Value)] = [("x", Scalar("long"))]
   assert_true(
     catalog.expand("one", values, max_output=2)
+    is Err(InvalidBinding("one", OutputTooLong)),
+  )
+  assert_true(
+    catalog.measure("one", values, max_output=2)
     is Err(InvalidBinding("one", OutputTooLong)),
   )
 }

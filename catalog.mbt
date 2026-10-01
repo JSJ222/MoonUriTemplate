@@ -89,6 +89,24 @@ pub fn TemplateCatalog::expand(
 }
 
 ///|
+/// Measure the exact output size of a named template without rendering it.
+pub fn TemplateCatalog::measure(
+  self : TemplateCatalog,
+  name : String,
+  bindings : Array[(String, Value)],
+  max_output? : Int = 1048576,
+) -> Result[Int, CatalogExpandError] {
+  let template = match self.templates.get(name) {
+    Some(value) => value
+    None => return Err(UnknownTemplate(name))
+  }
+  match template.measure(bindings, max_output~) {
+    Ok(value) => Ok(value)
+    Err(error) => Err(InvalidBinding(name, error))
+  }
+}
+
+///|
 pub fn CatalogError::code(self : CatalogError) -> String {
   match self {
     TooManyTemplates => "too_many_templates"
