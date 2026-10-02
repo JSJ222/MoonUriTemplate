@@ -47,6 +47,8 @@ let values : Array[(String, @uri_template.Value)] = [
 
 已有 JSON 配置的客户端可用 `compile_catalog_json` 把“端点名 → 模板字符串”的对象编译为命名目录，再用 `TemplateCatalog::expand_json` 根据 JSON 参数生成链接。JSON 键按 UTF-16 词法顺序排列；如果上游 JSON 解析器已丢弃重复键，应在读取文本时自行拒绝重复键。
 
+十月新增 `TemplateCatalog::measure_requests`，可在批量生成前检查精确总输出长度而不构造 URI 数组；`templates_using` 按目录顺序列出引用某变量的模板，便于 SDK 字段迁移时定位受影响端点。详见 [十月新增能力](docs/OCTOBER_FEATURES.md)。
+
 ## 语义与边界
 
 - 默认解析模式按 RFC 6570 字面量语法检查 Unicode、括号、变量名和修饰符。公开测试集中有一条包含模板外单引号的历史样例，与规范的字面量 ABNF 不一致；`strict_literals=false` 仅为这类兼容输入开放。

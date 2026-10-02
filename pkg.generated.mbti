@@ -277,7 +277,9 @@ pub fn TemplateCatalog::expand_json(Self, String, Json, max_output? : Int) -> Re
 pub fn TemplateCatalog::expand_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Array[String], CatalogBatchError]
 pub fn TemplateCatalog::get(Self, String) -> Template?
 pub fn TemplateCatalog::measure(Self, String, Array[(String, Value)], max_output? : Int) -> Result[Int, CatalogExpandError]
+pub fn TemplateCatalog::measure_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Int, CatalogBatchError]
 pub fn TemplateCatalog::names(Self) -> Array[String]
+pub fn TemplateCatalog::templates_using(Self, String) -> Array[String]
 
 pub struct TemplateDiff {
   added_variables : Array[String]
