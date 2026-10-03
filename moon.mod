@@ -9,13 +9,13 @@
 //   "moonbitlang/x@0.4.6",
 // }
 
-name = "oyjh0381/moonuritemplate"
+name = "JSJ222/moonuritemplate"
 
 version = "0.1.0"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/oyjh0381/MoonUriTemplate"
+repository = "https://github.com/JSJ222/MoonUriTemplate"
 
 license = "Apache-2.0"
 

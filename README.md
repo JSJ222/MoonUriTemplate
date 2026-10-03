@@ -8,9 +8,26 @@ API 客户端、MCP 资源客户端和服务端超媒体响应常需要把变量
 
 本项目专注**前向展开**。它不解析一般 URI，不反向匹配路由，不发送 HTTP 请求，不读取 OpenAPI 文档。OpenAPI 的部分参数序列化方式不能仅由 RFC 6570 表达；[API 示例](examples/api/main.mbt)只展示适用子集。
 
+## 作为依赖使用
+
+公开仓库：[JSJ222/MoonUriTemplate](https://github.com/JSJ222/MoonUriTemplate)。包命名空间为 `JSJ222/moonuritemplate`。
+
+```sh
+moon add JSJ222/moonuritemplate@0.1.0
+```
+
+在使用方的 `moon.pkg` 中配置导入：
+
+```text
+import {
+  "JSJ222/moonuritemplate" @uri_template,
+}
+```
+
+库作者、维护提交身份和发布账户为 `JSJ222`。第三方测试向量仍遵循原作者及其许可证，详见 `THIRD_PARTY.md`。
 ## 从源码运行
 
-需要 MoonBit 工具链。当前仓库尚未发布到 mooncakes.io，请先在此源码目录运行：
+需要 MoonBit 工具链。在此源码目录运行：
 
 ```sh
 moon version --all

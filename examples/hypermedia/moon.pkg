@@ -1,5 +1,5 @@
 import {
-  "oyjh0381/moonuritemplate" @uri_template,
+  "JSJ222/moonuritemplate" @uri_template,
 }
 
 pkgtype(kind: "executable")

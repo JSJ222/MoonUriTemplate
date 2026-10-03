@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "oyjh0381/moonuritemplate"
+package "JSJ222/moonuritemplate"
 
 // Values
 pub fn bindings_from_json(Json) -> Result[Array[(String, Value)], JsonBridgeError]
