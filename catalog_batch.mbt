@@ -40,11 +40,16 @@ pub fn TemplateCatalog::expand_requests(
   max_total_output? : Int = 16777216,
   max_each_output? : Int = 1048576,
 ) -> Result[Array[String], CatalogBatchError] {
-  if max_requests < 0 || requests.length() > max_requests {
-    return Err(TooManyRequests)
-  }
-  if max_total_output < 0 {
-    return Err(TotalOutputTooLong)
+  // Validate the aggregate budget before allocating any expanded URI.
+  match
+    self.measure_requests(
+      requests,
+      max_requests~,
+      max_total_output~,
+      max_each_output~,
+    ) {
+    Err(error) => return Err(error)
+    Ok(_) => ()
   }
   let outputs : Array[String] = []
   let mut used = 0

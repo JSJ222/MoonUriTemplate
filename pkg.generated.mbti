@@ -72,6 +72,16 @@ pub(all) enum CatalogBatchError {
 pub fn CatalogBatchError::code(Self) -> String
 pub fn CatalogBatchError::index(Self) -> Int?
 
+pub struct CatalogDiff {
+  added : Array[String]
+  removed : Array[String]
+  changed : Array[CatalogTemplateChange]
+}
+pub fn CatalogDiff::added(Self) -> Array[String]
+pub fn CatalogDiff::changed(Self) -> Array[CatalogTemplateChange]
+pub fn CatalogDiff::is_empty(Self) -> Bool
+pub fn CatalogDiff::removed(Self) -> Array[String]
+
 pub struct CatalogEntryAudit {
   name : String
   variable_count : Int
@@ -121,6 +131,13 @@ pub(all) struct CatalogRequest {
   name : String
   bindings : Array[(String, Value)]
 }
+
+pub struct CatalogTemplateChange {
+  name : String
+  contract : TemplateDiff
+}
+pub fn CatalogTemplateChange::contract(Self) -> TemplateDiff
+pub fn CatalogTemplateChange::name(Self) -> String
 
 pub(all) enum ExpandError {
   DuplicateVariable(String)
@@ -228,6 +245,23 @@ pub struct RenderedUri {
 pub fn RenderedUri::spans(Self) -> Array[OutputSpan]
 pub fn RenderedUri::text(Self) -> String
 
+pub struct RequestAudit {
+  index : Int
+  name : String
+  unknown_template : Bool
+  issues : Array[BindingIssue]
+}
+pub fn RequestAudit::index(Self) -> Int
+pub fn RequestAudit::issues(Self) -> Array[BindingIssue]
+pub fn RequestAudit::name(Self) -> String
+pub fn RequestAudit::unknown_template(Self) -> Bool
+
+pub(all) enum RequestAuditError {
+  RequestLimit
+  BindingLimit
+  FindingLimit
+}
+
 pub enum Segment {
   Literal(String)
   Expression(Operator, Array[VarSpec], Int, Int)
@@ -272,10 +306,12 @@ pub struct TemplateCatalog {
 }
 pub fn TemplateCatalog::audit(Self, TemplatePolicy) -> Result[CatalogAudit, PolicyError]
 pub fn TemplateCatalog::contains(Self, String) -> Bool
+pub fn TemplateCatalog::diff_catalog(Self, Self) -> CatalogDiff
 pub fn TemplateCatalog::expand(Self, String, Array[(String, Value)], max_output? : Int) -> Result[String, CatalogExpandError]
 pub fn TemplateCatalog::expand_json(Self, String, Json, max_output? : Int) -> Result[String, CatalogJsonRenderError]
 pub fn TemplateCatalog::expand_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Array[String], CatalogBatchError]
 pub fn TemplateCatalog::get(Self, String) -> Template?
+pub fn TemplateCatalog::inspect_requests(Self, Array[CatalogRequest], max_requests? : Int, max_bindings? : Int, max_findings? : Int) -> Result[Array[RequestAudit], RequestAuditError]
 pub fn TemplateCatalog::measure(Self, String, Array[(String, Value)], max_output? : Int) -> Result[Int, CatalogExpandError]
 pub fn TemplateCatalog::measure_requests(Self, Array[CatalogRequest], max_requests? : Int, max_total_output? : Int, max_each_output? : Int) -> Result[Int, CatalogBatchError]
 pub fn TemplateCatalog::names(Self) -> Array[String]

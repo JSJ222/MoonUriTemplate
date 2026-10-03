@@ -42,5 +42,7 @@ jobs:
         run: moon run examples/mcp --target wasm-gc
       - name: Run hypermedia example
         run: moon run examples/hypermedia --target wasm-gc
+      - name: Run catalog maintenance example
+        run: moon run examples/maintenance --target wasm-gc
       - name: Run native benchmark workload
         run: moon run benchmarks/main --target native --release
