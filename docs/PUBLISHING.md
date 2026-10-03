@@ -18,7 +18,7 @@
 
 - 公开仓库 `JSJ222/MoonUriTemplate`，默认分支 `main`；GitHub API 核验公开仓库拥有者为 JSJ222。
 - 首次推送 55 条提交，GitHub API 核验作者和提交者的关联账号均只有 `JSJ222`，包括全部历史提交。
-- 发布源提交：`0f8bf2df774b37cd144d0f4af0d877edabd79a7f`；[对应 CI](https://github.com/JSJ222/MoonUriTemplate/actions/runs/37108333078) 的 Ubuntu 和 Windows 作业全部成功。
+- 发布源提交：`c1fcea2879668ed495b6eb24776f46c25c718fd6`；[对应 CI](https://github.com/JSJ222/MoonUriTemplate/actions/runs/37108333078) 的 Ubuntu 和 Windows 作业全部成功。
 - Mooncakes `JSJ222/moonuritemplate@0.1.0` 发布 API 返回 `200 OK`，归档及解包检查通过。
 - 在工作区独立 `发布验证/MoonUriTemplate-JSJ222-0.1.0` 中，从公共注册表实际下载 0.1.0；运行展开、目录迁移、参数审查及混合请求 API 成功，不依赖本地 path 依赖。
 - 版本标签 `v0.1.0` 对应上述发布源提交；后续本记录完善仅为发布证据，不改变已发布 0.1.0 的实现。
