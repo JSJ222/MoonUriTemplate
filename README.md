@@ -64,3 +64,9 @@ let values : Array[(String, @uri_template.Value)] = [
 `moon run benchmarks/main --target native --release` 可执行固定的 20,000 次展开工作量；本机基线和复现条件见 [性能记录](docs/performance.md)。
 
 项目采用 Apache-2.0 许可证，见 [LICENSE](LICENSE)。[选题与竞品核查](docs/topic-research.md) 记录了 2026-10-01 的调查；Mooncakes 目录会变化，申报及发布前应实时复查。
+
+## 十月第二轮：目录迁移与请求审查
+
+`TemplateCatalog::diff_catalog(next)` 列出新增、删除和变更端点，连字面量路径变化也保留；每项变更附原有变量/运算符契约报告。`inspect_requests` 检查混合请求的全部诊断，限制请求、绑定及结果数量，返回请求索引和变量名，不包含绑定值。缺失变量属于提示，普通 RFC 展开允许省略。
+
+`expand_requests` 现在先调用精确计量，再构造输出，确保总预算超限在生成 URI 数组前被拒绝。计量仍有输入编码的临时分配，展开需额外遍历一次。运行 `moon run examples/maintenance --target wasm-gc`。详见 [本轮审查与复杂度](docs/SECOND_REVIEW.md) 和 [十月申报资料稿](十月项目申报书.md)。
