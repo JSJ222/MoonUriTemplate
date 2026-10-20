@@ -47,7 +47,7 @@ fn pointer_child(parent : String, name : String) -> String {
 /// Convert one JSON value. JSON null is an undefined variable or member.
 pub fn value_from_json(
   input : Json,
-  path? : String = "",
+  path~ : String = "",
 ) -> Result[Value?, JsonBridgeError] {
   match input {
     Null => Ok(None)

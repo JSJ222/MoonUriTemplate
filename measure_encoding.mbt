@@ -4,8 +4,8 @@
 fn measure_value_encoding(
   input : String,
   allow_reserved : Bool,
-  limit : Int,
-) -> Result[Int, ExpandError] {
+  limit : Int32,
+) -> Result[Int32, ExpandError] {
   if limit < 0 {
     return Err(OutputTooLong)
   }
@@ -43,8 +43,8 @@ fn measure_value_encoding(
 ///|
 fn measure_literal_encoding(
   input : String,
-  limit : Int,
-) -> Result[Int, ExpandError] {
+  limit : Int32,
+) -> Result[Int32, ExpandError] {
   if limit < 0 {
     return Err(OutputTooLong)
   }

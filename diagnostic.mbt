@@ -1,6 +1,6 @@
 ///|
 /// Return the UTF-16 code-unit offset of a parse error, if applicable.
-pub fn ParseError::offset(self : ParseError) -> Int? {
+pub fn ParseError::offset(self : ParseError) -> Int32? {
   match self {
     InvalidUnicode(at)
     | InvalidLiteral(at)

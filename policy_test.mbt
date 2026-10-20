@@ -39,7 +39,7 @@ test "policy reports feature level, fragment, and repeats" {
     Err(_) => fail("policy")
   }
   assert_eq(findings.length(), 5)
-  let counts : Map[String, Int] = Map([])
+  let counts : Map[String, Int32] = Map([])
   for finding in findings {
     let code = finding.kind.code()
     counts[code] = counts.get_or_default(code, 0) + 1

@@ -2,9 +2,9 @@
 /// Static analysis of one named template in a catalog.
 pub struct CatalogEntryAudit {
   name : String
-  variable_count : Int
-  expression_count : Int
-  max_level : Int
+  variable_count : Int32
+  expression_count : Int32
+  max_level : Int32
   findings : Array[PolicyFinding]
 }
 
@@ -14,17 +14,17 @@ pub fn CatalogEntryAudit::name(self : CatalogEntryAudit) -> String {
 }
 
 ///|
-pub fn CatalogEntryAudit::variable_count(self : CatalogEntryAudit) -> Int {
+pub fn CatalogEntryAudit::variable_count(self : CatalogEntryAudit) -> Int32 {
   self.variable_count
 }
 
 ///|
-pub fn CatalogEntryAudit::expression_count(self : CatalogEntryAudit) -> Int {
+pub fn CatalogEntryAudit::expression_count(self : CatalogEntryAudit) -> Int32 {
   self.expression_count
 }
 
 ///|
-pub fn CatalogEntryAudit::max_level(self : CatalogEntryAudit) -> Int {
+pub fn CatalogEntryAudit::max_level(self : CatalogEntryAudit) -> Int32 {
   self.max_level
 }
 
@@ -39,7 +39,7 @@ pub fn CatalogEntryAudit::findings(
 /// Policy findings for every catalog entry, preserving catalog order.
 pub struct CatalogAudit {
   entries : Array[CatalogEntryAudit]
-  total_findings : Int
+  total_findings : Int32
 }
 
 ///|
@@ -48,7 +48,7 @@ pub fn CatalogAudit::entries(self : CatalogAudit) -> Array[CatalogEntryAudit] {
 }
 
 ///|
-pub fn CatalogAudit::total_findings(self : CatalogAudit) -> Int {
+pub fn CatalogAudit::total_findings(self : CatalogAudit) -> Int32 {
   self.total_findings
 }
 

@@ -5,11 +5,11 @@
 pub fn Template::expand_required(
   self : Template,
   bindings : Array[(String, Value)],
-  reject_unused? : Bool = false,
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  reject_unused~ : Bool = false,
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[String, ExpandError] {
   if max_bindings < 0 || bindings.length() > max_bindings {
     return Err(TooManyBindings)

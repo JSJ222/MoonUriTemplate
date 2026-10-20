@@ -5,10 +5,10 @@
 pub fn TemplateCatalog::measure_requests(
   self : TemplateCatalog,
   requests : Array[CatalogRequest],
-  max_requests? : Int = 4096,
-  max_total_output? : Int = 16777216,
-  max_each_output? : Int = 1048576,
-) -> Result[Int, CatalogBatchError] {
+  max_requests~ : Int32 = 4096,
+  max_total_output~ : Int32 = 16777216,
+  max_each_output~ : Int32 = 1048576,
+) -> Result[Int32, CatalogBatchError] {
   if max_requests < 0 || requests.length() > max_requests {
     return Err(TooManyRequests)
   }

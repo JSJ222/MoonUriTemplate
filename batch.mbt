@@ -3,7 +3,7 @@
 pub(all) enum BatchError {
   TooManyInputs
   TotalOutputTooLong
-  InvalidItem(Int, ExpandError)
+  InvalidItem(Int32, ExpandError)
 }
 
 ///|
@@ -17,7 +17,7 @@ pub fn BatchError::code(self : BatchError) -> String {
 
 ///|
 /// Return the zero-based row number for a per-row expansion failure.
-pub fn BatchError::index(self : BatchError) -> Int? {
+pub fn BatchError::index(self : BatchError) -> Int32? {
   match self {
     InvalidItem(index, _) => Some(index)
     _ => None
@@ -31,9 +31,9 @@ pub fn BatchError::index(self : BatchError) -> Int? {
 pub fn Template::expand_many(
   self : Template,
   inputs : Array[Array[(String, Value)]],
-  max_inputs? : Int = 4096,
-  max_total_output? : Int = 16777216,
-  max_each_output? : Int = 1048576,
+  max_inputs~ : Int32 = 4096,
+  max_total_output~ : Int32 = 16777216,
+  max_each_output~ : Int32 = 1048576,
 ) -> Result[Array[String], BatchError] {
   if max_inputs < 0 || inputs.length() > max_inputs {
     return Err(TooManyInputs)

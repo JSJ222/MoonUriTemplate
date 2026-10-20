@@ -17,8 +17,8 @@ pub(all) enum CatalogExpandError {
 ///|
 /// A named set of precompiled templates for API endpoints or link relations.
 pub struct TemplateCatalog {
-  names : Array[String]
-  templates : Map[String, Template]
+  priv names : Array[String]
+  priv templates : Map[String, Template]
 }
 
 ///|
@@ -27,8 +27,8 @@ pub struct TemplateCatalog {
 /// endpoint or link relation.
 pub fn compile_catalog(
   entries : Array[(String, String)],
-  max_templates? : Int = 1024,
-  max_template_length? : Int = 65536,
+  max_templates~ : Int32 = 1024,
+  max_template_length~ : Int32 = 65536,
 ) -> Result[TemplateCatalog, CatalogError] {
   if max_templates < 0 || entries.length() > max_templates {
     return Err(TooManyTemplates)
@@ -76,7 +76,7 @@ pub fn TemplateCatalog::expand(
   self : TemplateCatalog,
   name : String,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
+  max_output~ : Int32 = 1048576,
 ) -> Result[String, CatalogExpandError] {
   let template = match self.templates.get(name) {
     Some(value) => value
@@ -94,8 +94,8 @@ pub fn TemplateCatalog::measure(
   self : TemplateCatalog,
   name : String,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
-) -> Result[Int, CatalogExpandError] {
+  max_output~ : Int32 = 1048576,
+) -> Result[Int32, CatalogExpandError] {
   let template = match self.templates.get(name) {
     Some(value) => value
     None => return Err(UnknownTemplate(name))

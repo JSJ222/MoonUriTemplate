@@ -1,5 +1,7 @@
 # MoonURITemplate
 
+Current source adds runtime parameter contracts (`Template::with_contract`) and immutable incremental links (`TemplateCatalog::start_session`, `LinkSession::update`). See [runtime integrations](docs/RUNTIME_INTEGRATIONS.md) and the `contracts` / `incremental_links` examples. On affected Windows 0.10.16, use `./tools/windows/moon.ps1`; see [toolchain notes](docs/WINDOWS_TOOLCHAIN.md).
+
 Pure MoonBit RFC 6570 Level 4 URI Template parser and expander for wasm, wasm-gc, JavaScript, and native targets.
 
 Compile a template once, then expand it with typed scalar, list, or ordered associative values. The library supports all eight defined operators, prefix and explode modifiers, UTF-8 percent encoding, sparse composites, bounded processing, source-aware analysis, binding preflight, and a conservative JSON bridge.

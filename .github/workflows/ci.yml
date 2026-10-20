@@ -19,6 +19,19 @@ jobs:
       - uses: hustcer/setup-moonbit@v1.23
       - name: Toolchain
         run: moon version --all
+      - name: Windows OCaml path compatibility
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          & ./tools/windows/build-shim.ps1
+          $shim = Join-Path $env:GITHUB_WORKSPACE '_build/windows-path-shims'
+          "MOONC_OVERRIDE=$shim/moonc.exe" >> $env:GITHUB_ENV
+          "MOONFMT_OVERRIDE=$shim/moonfmt.exe" >> $env:GITHUB_ENV
+          "MOONINFO_OVERRIDE=$shim/mooninfo.exe" >> $env:GITHUB_ENV
+          $env:MOONC_OVERRIDE = "$shim/moonc.exe"
+          Push-Location (Join-Path $env:USERPROFILE '.moon/lib/core')
+          moon bundle --all --warn-list -a
+          Pop-Location
       - name: Regenerate conformance tests
         run: |
           python tools/generate_conformance.py
@@ -44,5 +57,9 @@ jobs:
         run: moon run examples/hypermedia --target wasm-gc
       - name: Run catalog maintenance example
         run: moon run examples/maintenance --target wasm-gc
+      - name: Run contract and incremental examples
+        run: |
+          moon run examples/contracts --target wasm-gc
+          moon run examples/incremental_links --target wasm-gc
       - name: Run native benchmark workload
         run: moon run benchmarks/main --target native --release

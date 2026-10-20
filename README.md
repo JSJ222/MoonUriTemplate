@@ -66,6 +66,17 @@ let values : Array[(String, @uri_template.Value)] = [
 
 十月新增 `TemplateCatalog::measure_requests`，可在批量生成前检查精确总输出长度而不构造 URI 数组；`templates_using` 按目录顺序列出引用某变量的模板，便于 SDK 字段迁移时定位受影响端点。详见 [十月新增能力](docs/OCTOBER_FEATURES.md)。
 
+## 新增：运行时参数契约与增量链接
+
+- `Template::with_contract` 为 SDK、MCP 参数声明必填项及标量/列表/关联数组类型，提前拒绝类型错误、缺失项和未知参数；普通 RFC 展开语义保持不变。
+- `TemplateCatalog::start_session` 捕获共享绑定；`LinkSession::update` 按变量依赖只重新展开受影响端点，返回实际变化的链接和新快照。复合输入被复制，失败更新保留旧快照，输出预算包含未变化的链接。
+
+运行 `moon run examples/contracts --target wasm-gc` 和 `moon run examples/incremental_links --target wasm-gc`。语义、预算和复杂度见[运行时集成](docs/RUNTIME_INTEGRATIONS.md)。当前源码包含新功能；上面的 `0.1.0` 安装命令对应已发布的旧版本。
+
+已适配官方 MoonBit 0.10.16。受影响的 Windows 工具链使用 `./tools/windows/moon.ps1` 代替 `moon`；参见[工具链说明](docs/WINDOWS_TOOLCHAIN.md)。
+
+内部可变容器已改为私有，直接读字段的旧代码需改用 `variables()`、`names()`、`get()`、`fixed_names()` 等已有方法。
+
 ## 语义与边界
 
 - 默认解析模式按 RFC 6570 字面量语法检查 Unicode、括号、变量名和修饰符。公开测试集中有一条包含模板外单引号的历史样例，与规范的字面量 ABNF 不一致；`strict_literals=false` 仅为这类兼容输入开放。

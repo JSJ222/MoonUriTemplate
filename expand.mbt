@@ -4,10 +4,10 @@
 pub fn Template::expand(
   self : Template,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[String, ExpandError] {
   match
     self.expand_internal(
@@ -22,10 +22,10 @@ pub fn Template::expand(
 fn Template::expand_internal(
   self : Template,
   bindings : Array[(String, Value)],
-  max_output : Int,
-  max_bindings : Int,
-  max_value_length : Int,
-  max_items : Int,
+  max_output : Int32,
+  max_bindings : Int32,
+  max_value_length : Int32,
+  max_items : Int32,
   collect_spans : Bool,
 ) -> Result[RenderedUri, ExpandError] {
   if max_output < 0 {
@@ -85,9 +85,9 @@ fn Template::expand_internal(
 ///|
 fn prepare_bindings(
   bindings : Array[(String, Value)],
-  max_bindings : Int,
-  max_value_length : Int,
-  max_items : Int,
+  max_bindings : Int32,
+  max_value_length : Int32,
+  max_items : Int32,
 ) -> Result[Map[String, Value], ExpandError] {
   if max_bindings < 0 || bindings.length() > max_bindings {
     return Err(TooManyBindings)
@@ -111,7 +111,7 @@ fn prepare_bindings(
 fn check_text(
   text : String,
   name : String,
-  max_value_length : Int,
+  max_value_length : Int32,
 ) -> Result[Unit, ExpandError] {
   if max_value_length < 0 || text.length() > max_value_length {
     Err(ValueTooLong(name))
@@ -126,8 +126,8 @@ fn check_text(
 fn check_value(
   value : Value,
   name : String,
-  max_value_length : Int,
-  max_items : Int,
+  max_value_length : Int32,
+  max_items : Int32,
 ) -> Result[Unit, ExpandError] {
   match value {
     Scalar(text) => check_text(text, name, max_value_length)
@@ -258,12 +258,12 @@ fn join_text(parts : Array[String], separator : String) -> String {
 priv struct PieceBuffer {
   pieces : Array[String]
   separator : String
-  limit : Int
-  mut used : Int
+  limit : Int32
+  mut used : Int32
 }
 
 ///|
-fn PieceBuffer::new(separator : String, limit : Int) -> PieceBuffer {
+fn PieceBuffer::new(separator : String, limit : Int32) -> PieceBuffer {
   { pieces: [], separator, limit, used: 0, }
 }
 
@@ -292,7 +292,7 @@ fn expand_expression(
   op : Operator,
   specs : Array[VarSpec],
   values : Map[String, Value],
-  limit : Int,
+  limit : Int32,
 ) -> Result[String, ExpandError] {
   let prefix = operator_prefix(op)
   let pieces = PieceBuffer::new(operator_separator(op), limit - prefix.length())
@@ -336,7 +336,7 @@ fn expand_variable(
   op : Operator,
   spec : VarSpec,
   value : Value,
-  limit : Int,
+  limit : Int32,
 ) -> Result[Array[String], ExpandError] {
   let reserved = operator_allows_reserved(op)
   match value {

@@ -1,20 +1,20 @@
 ///|
 priv struct LengthPieces {
-  separator_length : Int
-  limit : Int
-  mut used : Int
-  mut count : Int
+  separator_length : Int32
+  limit : Int32
+  mut used : Int32
+  mut count : Int32
 }
 
 ///|
-fn LengthPieces::new(separator_length : Int, limit : Int) -> LengthPieces {
+fn LengthPieces::new(separator_length : Int32, limit : Int32) -> LengthPieces {
   { separator_length, limit, used: 0, count: 0, }
 }
 
 ///|
 fn LengthPieces::push(
   self : LengthPieces,
-  length : Int,
+  length : Int32,
 ) -> Result[Unit, ExpandError] {
   let separator = if self.count == 0 { 0 } else { self.separator_length }
   if length < 0 ||
@@ -31,9 +31,9 @@ fn LengthPieces::push(
 fn measured_named_length(
   op : Operator,
   name : String,
-  value_length : Int,
-  limit : Int,
-) -> Result[Int, ExpandError] {
+  value_length : Int32,
+  limit : Int32,
+) -> Result[Int32, ExpandError] {
   if !operator_named(op) {
     return Ok(value_length)
   }
@@ -52,10 +52,10 @@ fn measured_named_length(
 ///|
 fn measured_pair_length(
   op : Operator,
-  key_length : Int,
-  value_length : Int,
-  limit : Int,
-) -> Result[Int, ExpandError] {
+  key_length : Int32,
+  value_length : Int32,
+  limit : Int32,
+) -> Result[Int32, ExpandError] {
   let equal_sign = if value_length == 0 && !operator_form(op) { 0 } else { 1 }
   if key_length > limit - equal_sign ||
     value_length > limit - equal_sign - key_length {
@@ -218,8 +218,8 @@ fn measure_expression(
   op : Operator,
   specs : Array[VarSpec],
   values : Map[String, Value],
-  limit : Int,
-) -> Result[Int, ExpandError] {
+  limit : Int32,
+) -> Result[Int32, ExpandError] {
   let prefix_length = operator_prefix(op).length()
   let pieces = LengthPieces::new(
     operator_separator(op).length(),
@@ -248,11 +248,11 @@ fn measure_expression(
 pub fn Template::measure(
   self : Template,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
-) -> Result[Int, ExpandError] {
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
+) -> Result[Int32, ExpandError] {
   if max_output < 0 {
     return Err(OutputTooLong)
   }

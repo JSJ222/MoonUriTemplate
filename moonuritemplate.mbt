@@ -4,7 +4,7 @@
 pub fn expand(
   source : String,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
+  max_output~ : Int32 = 1048576,
 ) -> Result[String, TemplateError] {
   let template = match parse(source) {
     Ok(template) => template

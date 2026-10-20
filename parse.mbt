@@ -3,10 +3,10 @@
 /// Limits and error offsets are measured in UTF-16 code units.
 pub fn parse(
   input : String,
-  max_length? : Int = 65536,
-  max_expressions? : Int = 1024,
-  max_variables? : Int = 4096,
-  strict_literals? : Bool = true,
+  max_length~ : Int32 = 65536,
+  max_expressions~ : Int32 = 1024,
+  max_variables~ : Int32 = 4096,
+  strict_literals~ : Bool = true,
 ) -> Result[Template, ParseError] {
   if max_length < 0 || input.length() > max_length {
     return Err(InputTooLong)
@@ -86,7 +86,7 @@ pub fn parse(
 }
 
 ///|
-fn first_invalid_utf16(input : String) -> Int? {
+fn first_invalid_utf16(input : String) -> Int32? {
   let mut i = 0
   while i < input.length() {
     let code = input[i].to_int()
@@ -109,24 +109,24 @@ fn first_invalid_utf16(input : String) -> Int? {
 }
 
 ///|
-fn is_hex(code : Int) -> Bool {
+fn is_hex(code : Int32) -> Bool {
   (code >= 48 && code <= 57) ||
   (code >= 65 && code <= 70) ||
   (code >= 97 && code <= 102)
 }
 
 ///|
-fn is_alpha(code : Int) -> Bool {
+fn is_alpha(code : Int32) -> Bool {
   (code >= 65 && code <= 90) || (code >= 97 && code <= 122)
 }
 
 ///|
-fn is_digit(code : Int) -> Bool {
+fn is_digit(code : Int32) -> Bool {
   code >= 48 && code <= 57
 }
 
 ///|
-fn is_unreserved(code : Int) -> Bool {
+fn is_unreserved(code : Int32) -> Bool {
   is_alpha(code) ||
   is_digit(code) ||
   code == 45 ||
@@ -136,7 +136,7 @@ fn is_unreserved(code : Int) -> Bool {
 }
 
 ///|
-fn is_reserved(code : Int) -> Bool {
+fn is_reserved(code : Int32) -> Bool {
   match code {
     33
     | 35
@@ -161,7 +161,7 @@ fn is_reserved(code : Int) -> Bool {
 }
 
 ///|
-fn allowed_unicode_literal(code : Int) -> Bool {
+fn allowed_unicode_literal(code : Int32) -> Bool {
   (code >= 0xA0 && code <= 0xD7FF) ||
   (code >= 0xE000 && code <= 0xFDCF) ||
   (code >= 0xFDF0 && code <= 0xFFEF) ||
@@ -174,9 +174,9 @@ fn allowed_unicode_literal(code : Int) -> Bool {
 ///|
 fn validate_literal_unit(
   input : String,
-  at : Int,
+  at : Int32,
   strict_literals : Bool,
-) -> Result[Int, ParseError] {
+) -> Result[Int32, ParseError] {
   let code = input[at].to_int()
   if code == 37 {
     if at + 2 < input.length() &&
@@ -207,8 +207,8 @@ fn validate_literal_unit(
 ///|
 fn parse_expression(
   input : String,
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> Result[(Operator, Array[VarSpec]), ParseError] {
   let mut i = start
   let op = match input[i].to_int() {
@@ -270,9 +270,9 @@ fn parse_expression(
 ///|
 fn parse_varspec(
   input : String,
-  start : Int,
-  end : Int,
-) -> Result[(VarSpec, Int), ParseError] {
+  start : Int32,
+  end : Int32,
+) -> Result[(VarSpec, Int32), ParseError] {
   let mut i = start
   let mut need_char = true
   while i < end {
@@ -297,7 +297,7 @@ fn parse_varspec(
     return Err(InvalidVariable(i))
   }
   let name = input[start:i].to_owned()
-  let mut prefix : Int? = None
+  let mut prefix : Int32? = None
   let mut explode = false
   if i < end && input[i].to_int() == 58 {
     i += 1

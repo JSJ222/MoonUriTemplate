@@ -31,8 +31,8 @@ pub fn CatalogJsonError::path(self : CatalogJsonError) -> String {
 /// callers that reject duplicates must enforce that while reading JSON text.
 pub fn compile_catalog_json(
   input : Json,
-  max_templates? : Int = 1024,
-  max_template_length? : Int = 65536,
+  max_templates~ : Int32 = 1024,
+  max_template_length~ : Int32 = 65536,
 ) -> Result[TemplateCatalog, CatalogJsonError] {
   let fields = match input {
     Object(fields) => fields
@@ -78,7 +78,7 @@ pub fn TemplateCatalog::expand_json(
   self : TemplateCatalog,
   name : String,
   values : Json,
-  max_output? : Int = 1048576,
+  max_output~ : Int32 = 1048576,
 ) -> Result[String, CatalogJsonRenderError] {
   if !self.contains(name) {
     return Err(CatalogExpansion(UnknownTemplate(name)))

@@ -4,8 +4,8 @@
 pub(all) struct TemplatePolicy {
   allow_reserved : Bool
   allow_fragment : Bool
-  max_level : Int
-  max_references : Int
+  max_level : Int32
+  max_references : Int32
   forbid_repeated_variables : Bool
 }
 
@@ -50,7 +50,7 @@ fn TemplatePolicy::validate(self : TemplatePolicy) -> Result[Unit, PolicyError] 
 pub(all) enum PolicyFindingKind {
   ReservedExpansion
   FragmentExpansion
-  FeatureLevelExceeded(Int)
+  FeatureLevelExceeded(Int32)
   ReferenceLimitExceeded
   RepeatedVariable(String)
 }
@@ -70,8 +70,8 @@ pub fn PolicyFindingKind::code(self : PolicyFindingKind) -> String {
 /// UTF-16 source range of a static policy finding.
 pub(all) struct PolicyFinding {
   kind : PolicyFindingKind
-  start : Int
-  end : Int
+  start : Int32
+  end : Int32
 }
 
 ///|

@@ -1,5 +1,11 @@
 # URI Template Expansion
 
+**Runtime contract**: opt-in required variables and value shapes; ordinary RFC expansion is unchanged.
+
+**Link session**: immutable catalog snapshot with captured shared bindings, dependencies and expanded links.
+
+**Binding change**: a set/removal operation in an atomic patch; each variable occurs once per patch.
+
 This context describes reusable URI references with variable expressions and the values supplied to expand them.
 
 ## Language

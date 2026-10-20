@@ -7,8 +7,8 @@ pub struct TemplateDiff {
   removed_variables : Array[String]
   became_scalar_only : Array[String]
   new_repeated_variables : Array[String]
-  old_level : Int
-  new_level : Int
+  old_level : Int32
+  new_level : Int32
   reserved_added : Bool
   fragment_added : Bool
 }
@@ -36,12 +36,12 @@ pub fn TemplateDiff::new_repeated_variables(
 }
 
 ///|
-pub fn TemplateDiff::old_level(self : TemplateDiff) -> Int {
+pub fn TemplateDiff::old_level(self : TemplateDiff) -> Int32 {
   self.old_level
 }
 
 ///|
-pub fn TemplateDiff::new_level(self : TemplateDiff) -> Int {
+pub fn TemplateDiff::new_level(self : TemplateDiff) -> Int32 {
   self.new_level
 }
 

@@ -3,14 +3,14 @@
 /// RFC 6570 variables remain optional unless the caller uses `expand_required`.
 pub(all) struct VariableProfile {
   name : String
-  occurrences : Int
-  first_start : Int
-  last_end : Int
+  occurrences : Int32
+  first_start : Int32
+  last_end : Int32
   scalar_only : Bool
   uses_explode : Bool
   uses_reserved : Bool
   uses_query : Bool
-  maximum_prefix : Int?
+  maximum_prefix : Int32?
 }
 
 ///|
@@ -19,7 +19,7 @@ pub(all) struct VariableProfile {
 /// a scalar binding for that variable under this implementation.
 pub fn Template::variable_profiles(self : Template) -> Array[VariableProfile] {
   let profiles : Array[VariableProfile] = []
-  let indexes : Map[String, Int] = Map([])
+  let indexes : Map[String, Int32] = Map([])
   for segment in self.segments {
     match segment {
       Literal(_) => ()

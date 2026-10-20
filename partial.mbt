@@ -2,9 +2,9 @@
 /// A template with some values fixed in advance. Useful for per-client base
 /// paths or per-tenant URI prefixes that recur across many requests.
 pub struct BoundTemplate {
-  template : Template
-  fixed : Array[(String, Value)]
-  fixed_names : Map[String, Bool]
+  priv template : Template
+  priv fixed : Array[(String, Value)]
+  priv fixed_names : Map[String, Bool]
 }
 
 ///|
@@ -24,9 +24,9 @@ fn Value::deep_copy(self : Value) -> Value {
 pub fn Template::bind(
   self : Template,
   bindings : Array[(String, Value)],
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[BoundTemplate, ExpandError] {
   if max_bindings < 0 || bindings.length() > max_bindings {
     return Err(TooManyBindings)
@@ -63,10 +63,10 @@ pub fn BoundTemplate::fixed_names(self : BoundTemplate) -> Array[String] {
 pub fn BoundTemplate::expand(
   self : BoundTemplate,
   dynamic : Array[(String, Value)],
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[String, ExpandError] {
   let combined = match self.combine(dynamic, max_bindings) {
     Ok(value) => value
@@ -85,7 +85,7 @@ pub fn BoundTemplate::expand(
 fn BoundTemplate::combine(
   self : BoundTemplate,
   dynamic : Array[(String, Value)],
-  max_bindings : Int,
+  max_bindings : Int32,
 ) -> Result[Array[(String, Value)], ExpandError] {
   if max_bindings < 0 ||
     self.fixed.length() > max_bindings ||
@@ -108,11 +108,11 @@ fn BoundTemplate::combine(
 pub fn BoundTemplate::measure(
   self : BoundTemplate,
   dynamic : Array[(String, Value)],
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
-) -> Result[Int, ExpandError] {
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
+) -> Result[Int32, ExpandError] {
   let combined = match self.combine(dynamic, max_bindings) {
     Ok(value) => value
     Err(error) => return Err(error)

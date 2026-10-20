@@ -2,10 +2,10 @@
 /// A source segment and the exact UTF-16 range it contributed to the output.
 /// Empty expressions still have a zero-width output range.
 pub(all) struct OutputSpan {
-  source_start : Int
-  source_end : Int
-  output_start : Int
-  output_end : Int
+  source_start : Int32
+  source_end : Int32
+  output_start : Int32
+  output_end : Int32
   is_expression : Bool
 }
 
@@ -32,10 +32,10 @@ pub fn RenderedUri::spans(self : RenderedUri) -> Array[OutputSpan] {
 pub fn Template::expand_detailed(
   self : Template,
   bindings : Array[(String, Value)],
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[RenderedUri, ExpandError] {
   self.expand_internal(
     bindings, max_output, max_bindings, max_value_length, max_items, true,

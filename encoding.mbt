@@ -1,5 +1,5 @@
 ///|
-fn hex_digit(value : Int) -> Char {
+fn hex_digit(value : Int32) -> Char {
   if value < 10 {
     (48 + value).unsafe_to_char()
   } else {
@@ -8,7 +8,7 @@ fn hex_digit(value : Int) -> Char {
 }
 
 ///|
-fn pct_byte(out : StringBuilder, value : Int) -> Unit {
+fn pct_byte(out : StringBuilder, value : Int32) -> Unit {
   out.write_char('%')
   out.write_char(hex_digit(value >> 4))
   out.write_char(hex_digit(value & 15))
@@ -20,7 +20,7 @@ fn pct_byte(out : StringBuilder, value : Int) -> Unit {
 fn encode_value_limited(
   input : String,
   allow_reserved : Bool,
-  limit : Int,
+  limit : Int32,
 ) -> Result[String, ExpandError] {
   if limit < 0 {
     return Err(OutputTooLong)
@@ -67,7 +67,7 @@ fn encode_value_limited(
 /// parser has already rejected malformed triplets and unpaired surrogates.
 fn encode_literal_limited(
   input : String,
-  limit : Int,
+  limit : Int32,
 ) -> Result[String, ExpandError] {
   if limit < 0 {
     return Err(OutputTooLong)
@@ -95,7 +95,7 @@ fn encode_literal_limited(
 }
 
 ///|
-fn hex_value(code : Int) -> Int {
+fn hex_value(code : Int32) -> Int32 {
   if code >= 48 && code <= 57 {
     code - 48
   } else if code >= 65 && code <= 70 {
@@ -106,7 +106,7 @@ fn hex_value(code : Int) -> Int {
 }
 
 ///|
-fn triplet_byte(value : String, start : Int) -> Int? {
+fn triplet_byte(value : String, start : Int32) -> Int32? {
   if start + 2 < value.length() &&
     value[start].to_int() == 37 &&
     is_hex(value[start + 1].to_int()) &&
@@ -121,7 +121,12 @@ fn triplet_byte(value : String, start : Int) -> Int? {
 }
 
 ///|
-fn continuation(value : String, start : Int, lower : Int, upper : Int) -> Bool {
+fn continuation(
+  value : String,
+  start : Int32,
+  lower : Int32,
+  upper : Int32,
+) -> Bool {
   match triplet_byte(value, start) {
     Some(byte) => byte >= lower && byte <= upper
     None => false
@@ -131,7 +136,7 @@ fn continuation(value : String, start : Int, lower : Int, upper : Int) -> Bool {
 ///|
 /// A valid encoded UTF-8 character is one prefix unit even though it may
 /// contain two, three, or four percent triplets.
-fn encoded_character_end(value : String, start : Int) -> Int? {
+fn encoded_character_end(value : String, start : Int32) -> Int32? {
   let lead = match triplet_byte(value, start) {
     Some(byte) => byte
     None => return None
@@ -165,7 +170,7 @@ fn encoded_character_end(value : String, start : Int) -> Int? {
 ///|
 /// Prefix length counts Unicode scalar values, not UTF-16 units or bytes.
 /// Well-formed percent-encoded UTF-8 sequences remain whole prefix units.
-fn scalar_prefix(value : String, length : Int) -> String {
+fn scalar_prefix(value : String, length : Int32) -> String {
   let mut index = 0
   let mut count = 0
   while index < value.length() && count < length {

@@ -1,0 +1,5 @@
+import {
+  "JSJ222/moonuritemplate" @uri_template,
+}
+
+pkgtype(kind: "executable")

@@ -21,10 +21,10 @@ pub fn JsonRenderError::code(self : JsonRenderError) -> String {
 pub fn Template::expand_json(
   self : Template,
   values : Json,
-  max_output? : Int = 1048576,
-  max_bindings? : Int = 4096,
-  max_value_length? : Int = 1048576,
-  max_items? : Int = 4096,
+  max_output~ : Int32 = 1048576,
+  max_bindings~ : Int32 = 4096,
+  max_value_length~ : Int32 = 1048576,
+  max_items~ : Int32 = 4096,
 ) -> Result[String, JsonRenderError] {
   let bindings = match bindings_from_json(values) {
     Ok(value) => value
@@ -48,7 +48,7 @@ pub fn Template::expand_json(
 pub fn expand_json(
   source : String,
   values : Json,
-  max_output? : Int = 1048576,
+  max_output~ : Int32 = 1048576,
 ) -> Result[String, JsonTemplateError] {
   let template = match parse(source) {
     Ok(value) => value

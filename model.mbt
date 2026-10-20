@@ -12,14 +12,14 @@ pub(all) enum Value {
 /// A parse failure with a UTF-16 code-unit offset into the template.
 pub(all) enum ParseError {
   InputTooLong
-  InvalidUnicode(Int)
-  InvalidLiteral(Int)
-  UnclosedExpression(Int)
-  NestedExpression(Int)
-  EmptyExpression(Int)
-  InvalidOperator(Int)
-  InvalidVariable(Int)
-  InvalidModifier(Int)
+  InvalidUnicode(Int32)
+  InvalidLiteral(Int32)
+  UnclosedExpression(Int32)
+  NestedExpression(Int32)
+  EmptyExpression(Int32)
+  InvalidOperator(Int32)
+  InvalidVariable(Int32)
+  InvalidModifier(Int32)
   TooManyExpressions
   TooManyVariables
 }
@@ -48,7 +48,7 @@ pub(all) enum TemplateError {
 ///|
 pub enum Segment {
   Literal(String)
-  Expression(Operator, Array[VarSpec], Int, Int)
+  Expression(Operator, Array[VarSpec], Int32, Int32)
 }
 
 ///|
@@ -66,18 +66,18 @@ pub enum Operator {
 ///|
 pub struct VarSpec {
   name : String
-  prefix : Int?
+  prefix : Int32?
   explode : Bool
-  start : Int
-  end : Int
+  start : Int32
+  end : Int32
 }
 
 ///|
 /// A compiled template. Reuse it for many value sets.
 pub struct Template {
-  source : String
-  segments : Array[Segment]
-  variables : Array[String]
+  priv source : String
+  priv segments : Array[Segment]
+  priv variables : Array[String]
 }
 
 ///|

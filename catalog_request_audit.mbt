@@ -8,14 +8,14 @@ pub(all) enum RequestAuditError {
 ///|
 /// No values or expanded URIs are included in a request audit.
 pub struct RequestAudit {
-  index : Int
+  index : Int32
   name : String
   unknown_template : Bool
   issues : Array[BindingIssue]
 }
 
 ///|
-pub fn RequestAudit::index(self : RequestAudit) -> Int {
+pub fn RequestAudit::index(self : RequestAudit) -> Int32 {
   self.index
 }
 
@@ -41,9 +41,9 @@ pub fn RequestAudit::issues(self : RequestAudit) -> Array[BindingIssue] {
 pub fn TemplateCatalog::inspect_requests(
   self : TemplateCatalog,
   requests : Array[CatalogRequest],
-  max_requests? : Int = 4096,
-  max_bindings? : Int = 16384,
-  max_findings? : Int = 16384,
+  max_requests~ : Int32 = 4096,
+  max_bindings~ : Int32 = 16384,
+  max_findings~ : Int32 = 16384,
 ) -> Result[Array[RequestAudit], RequestAuditError] {
   if max_requests < 0 || requests.length() > max_requests {
     return Err(RequestLimit)

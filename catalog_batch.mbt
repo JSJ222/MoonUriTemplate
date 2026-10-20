@@ -9,7 +9,7 @@ pub(all) struct CatalogRequest {
 pub(all) enum CatalogBatchError {
   TooManyRequests
   TotalOutputTooLong
-  InvalidRequest(Int, CatalogExpandError)
+  InvalidRequest(Int32, CatalogExpandError)
 }
 
 ///|
@@ -23,7 +23,7 @@ pub fn CatalogBatchError::code(self : CatalogBatchError) -> String {
 
 ///|
 /// Zero-based request index when a catalog batch failed on one row.
-pub fn CatalogBatchError::index(self : CatalogBatchError) -> Int? {
+pub fn CatalogBatchError::index(self : CatalogBatchError) -> Int32? {
   match self {
     InvalidRequest(index, _) => Some(index)
     _ => None
@@ -36,9 +36,9 @@ pub fn CatalogBatchError::index(self : CatalogBatchError) -> Int? {
 pub fn TemplateCatalog::expand_requests(
   self : TemplateCatalog,
   requests : Array[CatalogRequest],
-  max_requests? : Int = 4096,
-  max_total_output? : Int = 16777216,
-  max_each_output? : Int = 1048576,
+  max_requests~ : Int32 = 4096,
+  max_total_output~ : Int32 = 16777216,
+  max_each_output~ : Int32 = 1048576,
 ) -> Result[Array[String], CatalogBatchError] {
   // Validate the aggregate budget before allocating any expanded URI.
   match

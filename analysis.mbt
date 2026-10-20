@@ -1,11 +1,11 @@
 ///|
 /// One brace expression in the source template. Offsets are UTF-16 code units.
 pub(all) struct ExpressionInfo {
-  start : Int
-  end : Int
+  start : Int32
+  end : Int32
   operator : String
-  level : Int
-  variable_count : Int
+  level : Int32
+  variable_count : Int32
   permits_reserved : Bool
 }
 
@@ -13,11 +13,11 @@ pub(all) struct ExpressionInfo {
 /// One occurrence of a variable specification, including its modifier.
 pub(all) struct VariableUse {
   name : String
-  start : Int
-  end : Int
-  expression_index : Int
+  start : Int32
+  end : Int32
+  expression_index : Int32
   operator : String
-  prefix : Int?
+  prefix : Int32?
   explode : Bool
 }
 
@@ -26,7 +26,7 @@ pub(all) struct VariableUse {
 pub struct TemplateAnalysis {
   expressions : Array[ExpressionInfo]
   uses : Array[VariableUse]
-  max_level : Int
+  max_level : Int32
   has_reserved_expansion : Bool
 }
 
@@ -44,7 +44,7 @@ pub fn TemplateAnalysis::uses(self : TemplateAnalysis) -> Array[VariableUse] {
 
 ///|
 /// Highest RFC 6570 feature level required by the template (1–4).
-pub fn TemplateAnalysis::max_level(self : TemplateAnalysis) -> Int {
+pub fn TemplateAnalysis::max_level(self : TemplateAnalysis) -> Int32 {
   self.max_level
 }
 
@@ -71,7 +71,7 @@ fn Operator::symbol(self : Operator) -> String {
 }
 
 ///|
-fn Operator::level(self : Operator) -> Int {
+fn Operator::level(self : Operator) -> Int32 {
   match self {
     Simple => 1
     Reserved | Fragment => 2
@@ -128,7 +128,7 @@ pub fn Template::analyze(self : Template) -> TemplateAnalysis {
 
 ///|
 /// Count how often a variable occurs in this template.
-pub fn Template::reference_count(self : Template, name : String) -> Int {
+pub fn Template::reference_count(self : Template, name : String) -> Int32 {
   let mut count = 0
   for segment in self.segments {
     match segment {

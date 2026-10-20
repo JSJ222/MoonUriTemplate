@@ -24,7 +24,7 @@ pub fn BindingReport::is_clean(self : BindingReport) -> Bool {
 }
 
 ///|
-pub fn BindingReport::missing_count(self : BindingReport) -> Int {
+pub fn BindingReport::missing_count(self : BindingReport) -> Int32 {
   let mut count = 0
   for issue in self.issues {
     if issue is Missing(_) {
