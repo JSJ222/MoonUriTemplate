@@ -4,6 +4,7 @@ target/
 target
 .mooncakes/
 .moonagent/
+/docs/PUBLISHING.md
 
 # Local development reports and application materials
 /docs/archive/

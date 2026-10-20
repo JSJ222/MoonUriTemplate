@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — 2026-10-20
+## 0.2.0 — 2026-10-20
 
 - Adapt syntax/interfaces to MoonBit 0.10.16; add optional Windows argv compatibility and stable LF CI checkouts.
 - Add runtime parameter contracts with required-value semantics, shape checks and explicit errors.

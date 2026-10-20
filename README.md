@@ -13,7 +13,7 @@ API 客户端、MCP 资源客户端和服务端超媒体响应常需要把变量
 公开仓库：[JSJ222/MoonUriTemplate](https://github.com/JSJ222/MoonUriTemplate)。包命名空间为 `JSJ222/moonuritemplate`。
 
 ```sh
-moon add JSJ222/moonuritemplate@0.1.0
+moon add JSJ222/moonuritemplate@0.2.0
 ```
 
 在使用方的 `moon.pkg` 中配置导入：
@@ -71,7 +71,7 @@ let values : Array[(String, @uri_template.Value)] = [
 - `Template::with_contract` 为 SDK、MCP 参数声明必填项及标量/列表/关联数组类型，提前拒绝类型错误、缺失项和未知参数；普通 RFC 展开语义保持不变。
 - `TemplateCatalog::start_session` 捕获共享绑定；`LinkSession::update` 按变量依赖只重新展开受影响端点，返回实际变化的链接和新快照。复合输入被复制，失败更新保留旧快照，输出预算包含未变化的链接。
 
-运行 `moon run examples/contracts --target wasm-gc` 和 `moon run examples/incremental_links --target wasm-gc`。语义、预算和复杂度见[运行时集成](docs/RUNTIME_INTEGRATIONS.md)。当前源码包含新功能；上面的 `0.1.0` 安装命令对应已发布的旧版本。
+运行 `moon run examples/contracts --target wasm-gc` 和 `moon run examples/incremental_links --target wasm-gc`。语义、预算和复杂度见[运行时集成](docs/RUNTIME_INTEGRATIONS.md)。这些能力自 `0.2.0` 提供。
 
 已适配官方 MoonBit 0.10.16。受影响的 Windows 工具链使用 `./tools/windows/moon.ps1` 代替 `moon`；参见[工具链说明](docs/WINDOWS_TOOLCHAIN.md)。
 
