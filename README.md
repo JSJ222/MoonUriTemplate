@@ -1,19 +1,45 @@
-# MoonURITemplate
+# MoonUriTemplate — API 契约工作区与变更治理基础库
 
-MoonURITemplate 是纯 MoonBit 的 RFC 6570 Level 4 URI Template 编译与展开库。它把 `/users/{id}{?fields*,limit}` 和调用时的变量转换为 URI 引用，处理 UTF-8 百分号编码、8 种标准展开运算符、前缀和 explode 修饰符，以及标量、列表、关联数组。代码可在 wasm、wasm-gc、js 和 native 后端运行。
+从 0.3.0 开始，主能力是纯 MoonBit 的**离线 API 契约工作区**：锁定跨文档 Schema → 校验类型化请求/响应 → 原子更新文档 → 按传递依赖重建操作 → 对受影响消费者执行升级门禁。工作区可作为 SDK、Web 框架中间件、契约编辑器和 CI 的基础库，不绑定某个 HTTP 框架。原 RFC 6570 Level 4 接口保持兼容；不通过改名掩盖历史。
+
+## 0.3.0 核心能力与三个场景
+
+- **标准接入及双向边界校验**：支持明确限定的 OpenAPI 3.1 JSON 导入、四种位置的类型化参数、JSON 请求体、状态/媒体类型/声明响应头及响应体校验。复用 `moonbitstack/moonschema@0.2.0`，不再重复制造浅层 Schema 验证器。
+- **多文档契约生命周期**：显式离线资源锁、跨文档 JSON Pointer、传递反向依赖、不可变快照、原子文档替换/移除、失败回滚、无变化复用和受影响操作重建。
+- **消费者驱动升级门禁**：结构性破坏阻断；复杂 Schema 变化保守标记 `review`，需要显式审批和正向用例覆盖。每次重验旧基线，候选只重放变化操作的用例，结果与冷启动对照，导出不含调用值的 JSON 报告。不是任意 Schema 的兼容性证明。
+
+| 代表场景 | 输入到输出 | 运行命令 |
+| --- | --- | --- |
+| SDK / 服务边界 | OpenAPI 库存接口 → 参数预检与路径编码 → 接收响应时拒绝负库存 | `moon run examples/contract_sdk --target wasm-gc` |
+| 多服务共享 DTO 演进 | 身份 Schema 的跨文档修改 → 2/3 操作重建 → 引用错误回滚及冷启动等价检查 | `moon run examples/contract_workspace --target wasm-gc` |
+| CI / 契约编辑器发布门禁 | 消费者正反样例 → 变化分类 → 受控审批 → 定向重放和 JSON 结果 | `moon run examples/contract_ci --target wasm-gc` |
+
+三个是有断言的可运行集成示例，不是已有企业用户采用证明。完整格式、支持矩阵、复杂度、量化验证和生态分工见 [API 契约工作区](docs/API_CONTRACTS.md)。
+
+```text
+import {
+  "JSJ222/moonuritemplate/contracts" @contracts,
+}
+```
+
+关键入口：`compile_workspace` / `import_openapi`、`validate_request` / `validate_response`、`update_documents`、`compare` / `gate_upgrade`。工作区文档更新仅用于 Schema；操作定义变更须重新导入或冷编译，不能把改 OpenAPI 操作声明当 Schema 补丁。库不负责 HTTP I/O、认证、YAML、线格式解码或 SDK 代码生成。所有调用必须串行使用同一工作区的上游验证器。
+
+## 保留的 URI 模板能力
+
+根包仍为 RFC 6570 Level 4 URI Template 编译与展开库，处理 UTF-8 百分号编码、8 种标准展开运算符、前缀和 explode 修饰符、标量和复合值。它为工作区提供 path 构造，但不是本次差异化贡献的主体。
 
 ## 解决什么问题
 
 API 客户端、MCP 资源客户端和服务端超媒体响应常需要把变量嵌入 URI。手写字符串拼接容易把路径中的 `/`、空格、`%`、Unicode 和可选查询参数处理错。RFC 6570 为这些情况规定统一的展开语义，本库提供可复用的编译结果及显式错误。
 
-本项目专注**前向展开**。它不解析一般 URI，不反向匹配路由，不发送 HTTP 请求，不读取 OpenAPI 文档。OpenAPI 的部分参数序列化方式不能仅由 RFC 6570 表达；[API 示例](examples/api/main.mbt)只展示适用子集。
+根包专注**前向展开**。它不解析一般 URI、不反向匹配路由、不发送 HTTP 请求；OpenAPI 导入位于独立的 `contracts` 包。OpenAPI 的线格式参数序列化不能仅由 RFC 6570 表达；旧 [API 示例](examples/api/main.mbt)只展示 URI 构造子集。
 
 ## 作为依赖使用
 
 公开仓库：[JSJ222/MoonUriTemplate](https://github.com/JSJ222/MoonUriTemplate)。包命名空间为 `JSJ222/moonuritemplate`。
 
 ```sh
-moon add JSJ222/moonuritemplate@0.2.0
+moon add JSJ222/moonuritemplate@0.3.0
 ```
 
 在使用方的 `moon.pkg` 中配置导入：

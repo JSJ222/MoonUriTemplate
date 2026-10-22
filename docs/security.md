@@ -1,5 +1,11 @@
 # Security and resource boundaries
 
+The new API contract workspace has additional schema/interpreter constraints:
+see [support profile and quotas](API_CONTRACTS.md). It is offline, rejects
+recursive/dynamic references and requires serialized interpreter access. Host
+process quotas/timeouts remain necessary for untrusted schemas and instances;
+returned findings limits do not cap upstream eager diagnostic allocation.
+
 URI Template expansion is string construction, not destination validation. RFC 6570 permits `+` and `#` expansions to retain reserved characters; an untrusted value can therefore change the apparent path, query, or fragment. Use those operators only when their behavior is required, and validate the final URI with an application-specific policy before making requests. This library performs no DNS lookup, network request, filesystem access, or authority allowlist check.
 
 `parse` validates a well-formed UTF-16 template and RFC literal/varspec grammar. The default limits are 65,536 UTF-16 code units, 1,024 expressions, and 4,096 variable specifications. `Template::expand` validates every binding and defaults to 4,096 bindings, 1,048,576 UTF-16 units per scalar/key/member, 4,096 items per composite, and 1,048,576 output characters. These are logical work limits, not a process RSS cap. Callers can set lower values for untrusted inputs.

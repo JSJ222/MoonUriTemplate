@@ -1,5 +1,9 @@
 # Architecture and complexity
 
+This page describes the retained URI package. The 0.3.0 operation-contract
+workspace, dependency/update/gate algorithms and their costs are documented
+separately in [API contracts](API_CONTRACTS.md).
+
 `parse.mbt` scans UTF-16 units once, validates literal/varspec grammar, and stores expression and variable spans. A hash map records first-seen variable names, so parsing takes O(T) expected time and O(T) AST space for template length T. The public offsets are UTF-16 code-unit offsets, matching MoonBit `String` indexing. A complete percent triplet in a variable name remains part of that name; it is not decoded.
 
 `encoding.mbt` converts selected values to UTF-8 bytes and percent-encodes disallowed octets. Reserved/fragment operators retain RFC reserved characters and valid existing triplets. Prefix scanning counts Unicode scalar values and groups valid percent-encoded UTF-8 sequences. This avoids splitting surrogate pairs or a pre-encoded character at a prefix boundary.

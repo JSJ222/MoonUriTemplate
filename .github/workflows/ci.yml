@@ -63,3 +63,17 @@ jobs:
           moon run examples/incremental_links --target wasm-gc
       - name: Run native benchmark workload
         run: moon run benchmarks/main --target native --release
+      - name: Run API contract scenarios
+        run: |
+          moon run examples/contract_sdk --target wasm-gc
+          moon run examples/contract_workspace --target wasm-gc
+          moon run examples/contract_ci --target wasm-gc
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Independent JSON Schema profile comparison
+        run: |
+          python -m pip install jsonschema==4.26.0
+          python tools/compare_contract_oracle.py
+      - name: Contract update cold-equivalence workload
+        run: moon run benchmarks/contract_management --target native --release

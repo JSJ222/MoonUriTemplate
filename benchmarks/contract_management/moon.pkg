@@ -1,0 +1,6 @@
+import {
+  "JSJ222/moonuritemplate/contracts",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")

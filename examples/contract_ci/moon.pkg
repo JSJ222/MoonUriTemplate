@@ -1,0 +1,5 @@
+import {
+  "JSJ222/moonuritemplate/contracts",
+}
+
+pkgtype(kind: "executable")

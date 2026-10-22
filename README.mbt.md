@@ -1,4 +1,20 @@
-# MoonURITemplate
+# MoonUriTemplate — offline API contract workspaces
+
+Version 0.3.0 adds `JSJ222/moonuritemplate/contracts`: a bounded OpenAPI 3.1 JSON importer, typed request/response validation, offline cross-document schema locks, transitive reverse dependencies, immutable atomic document updates, conservative change review and consumer-driven upgrade gates. Schema interpretation reuses `moonbitstack/moonschema@0.2.0` (Apache-2.0); workspace ownership, dependency tracking and governance are original project code.
+
+The goal is contract lifecycle management rather than another RFC 6570 expander. The root URI package remains source compatible. Existing MoonBit contract validators and compatibility tools are acknowledged in the [support matrix and ecosystem comparison](docs/API_CONTRACTS.md).
+
+```text
+import { "JSJ222/moonuritemplate/contracts" @contracts, }
+```
+
+Run three asserted scenarios: `moon run examples/contract_sdk --target wasm-gc`, `moon run examples/contract_workspace --target wasm-gc`, and `moon run examples/contract_ci --target wasm-gc`. They cover SDK boundaries, shared DTO evolution and CI release gates. The examples perform no HTTP requests.
+
+Only the documented profile is supported: typed decoded values, exact JSON media types and an explicit offline schema lock. Unsupported features fail explicitly. No YAML, automatic fetching, authentication execution, raw HTTP decoding, recursive/dynamic references, `$id` scope rebasing or complete OpenAPI validation. Schema changes require explicit review; passing examples is not a universal compatibility proof. Calls sharing a workspace must be serialized because the upstream interpreter is not concurrently reentrant.
+
+`python tools/compare_contract_oracle.py` compares 351 original fixtures with python-jsonschema 4.26.0 (Draft 2020-12). `moon run benchmarks/contract_management --target native --release` asserts cold/incremental equivalence and prints actual rebuild/replay counts and timing percentiles. See [API contracts](docs/API_CONTRACTS.md) for reproducibility and limitations.
+
+## Legacy URI package
 
 Current source adds runtime parameter contracts (`Template::with_contract`) and immutable incremental links (`TemplateCatalog::start_session`, `LinkSession::update`). See [runtime integrations](docs/RUNTIME_INTEGRATIONS.md) and the `contracts` / `incremental_links` examples. On affected Windows 0.10.16, use `./tools/windows/moon.ps1`; see [toolchain notes](docs/WINDOWS_TOOLCHAIN.md).
 
