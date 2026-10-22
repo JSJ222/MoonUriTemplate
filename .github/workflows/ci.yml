@@ -19,6 +19,8 @@ jobs:
       - uses: hustcer/setup-moonbit@v1.23
       - name: Toolchain
         run: moon version --all
+      - name: Refresh package registry for clean runners
+        run: moon update
       - name: Windows OCaml path compatibility
         if: runner.os == 'Windows'
         shell: pwsh
