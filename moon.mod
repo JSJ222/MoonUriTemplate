@@ -11,7 +11,7 @@
 
 name = "JSJ222/moonuritemplate"
 
-version = "0.2.0"
+version = "0.3.0"
 
 readme = "README.mbt.md"
 
@@ -19,8 +19,12 @@ repository = "https://github.com/JSJ222/MoonUriTemplate"
 
 license = "Apache-2.0"
 
-keywords = [ "uri-template", "rfc6570", "url", "api", "mcp" ]
+keywords = [ "api-contract", "openapi", "schema", "incremental", "rfc6570" ]
 
 preferred_target = "wasm-gc"
 
-description = "RFC 6570 Level 4 URI Template parser and expansion library"
+import {
+  "moonbitstack/moonschema@0.2.0",
+}
+
+description = "Offline API contract workspaces, dependency-aware updates and consumer upgrade gates; RFC 6570 compatibility"

@@ -19,5 +19,5 @@ pub fn expand(
 ///|
 /// Semantic version of this source checkout.
 pub fn version() -> String {
-  "0.2.0"
+  "0.3.0"
 }

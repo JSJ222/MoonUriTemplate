@@ -1,0 +1,149 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "JSJ222/moonuritemplate/contracts"
+
+// Values
+pub fn compile_workspace(Json, limits? : WorkspaceLimits) -> Workspace raise WorkspaceError
+
+pub fn compile_workspace_text(String, limits? : WorkspaceLimits) -> Workspace raise WorkspaceError
+
+pub fn import_openapi(Json, String, documents? : Map[String, Json], limits? : WorkspaceLimits) -> Workspace raise WorkspaceError
+
+// Errors
+pub(all) suberror WorkspaceError {
+  Invalid(path~ : String, reason~ : String)
+  Unsupported(path~ : String, feature~ : String)
+  Budget(String)
+}
+
+// Types and methods
+pub(all) struct CaseResult {
+  name : String
+  operation : String
+  expected_valid : Bool
+  actual_valid : Bool
+  passed : Bool
+  violations : Array[Violation]
+}
+
+pub(all) enum ChangeSeverity {
+  Breaking
+  Review
+  Additive
+} derive(Eq)
+pub fn ChangeSeverity::equal(Self, Self) -> Bool
+pub fn ChangeSeverity::not_equal(Self, Self) -> Bool
+
+pub(all) struct ConsumerCase {
+  name : String
+  operation : String
+  request : Request
+  response : Response?
+  expect_valid : Bool
+}
+
+pub(all) struct ContractChange {
+  operation : String
+  severity : ChangeSeverity
+  code : String
+}
+
+pub(all) struct DocumentChange {
+  name : String
+  document : Json?
+}
+
+pub(all) enum ParameterLocation {
+  Path
+  Query
+  Header
+  Cookie
+} derive(Eq)
+pub fn ParameterLocation::equal(Self, Self) -> Bool
+pub fn ParameterLocation::not_equal(Self, Self) -> Bool
+
+pub(all) struct ParameterValue {
+  location : ParameterLocation
+  name : String
+  value : Json
+}
+
+pub(all) struct Request {
+  parameters : Array[ParameterValue]
+  body : Json?
+  media_type : String?
+}
+
+pub(all) struct Response {
+  status : Int32
+  headers : Array[(String, Json)]
+  body : Json?
+  media_type : String?
+}
+
+pub(all) struct UpgradeBlocker {
+  operation : String
+  code : String
+}
+
+pub struct UpgradeDecision {
+  // private fields
+}
+pub fn UpgradeDecision::accepted(Self) -> Bool
+pub fn UpgradeDecision::approved_workspace(Self) -> Workspace?
+pub fn UpgradeDecision::baseline_results(Self) -> Array[CaseResult]
+pub fn UpgradeDecision::blockers(Self) -> Array[UpgradeBlocker]
+pub fn UpgradeDecision::changes(Self) -> Array[ContractChange]
+pub fn UpgradeDecision::replayed_cases(Self) -> Int32
+pub fn UpgradeDecision::results(Self) -> Array[CaseResult]
+pub fn UpgradeDecision::to_json(Self) -> Json
+
+pub(all) struct Violation {
+  operation : String
+  location : String
+  instance_path : String
+  schema_path : String
+  code : String
+} derive(Eq)
+pub fn Violation::equal(Self, Self) -> Bool
+pub fn Violation::not_equal(Self, Self) -> Bool
+
+pub struct Workspace {
+  // private fields
+}
+pub fn Workspace::compare(Self, Self) -> Array[ContractChange]
+pub fn Workspace::gate_upgrade(Self, Self, Array[ConsumerCase], approve_review? : Bool) -> UpgradeDecision raise WorkspaceError
+pub fn Workspace::manifest(Self) -> Json raise WorkspaceError
+pub fn Workspace::operation_names(Self) -> Array[String]
+pub fn Workspace::operations_using(Self, String) -> Array[String]
+pub fn Workspace::replay(Self, Array[ConsumerCase]) -> Array[CaseResult] raise WorkspaceError
+pub fn Workspace::request_path(Self, String, Request) -> String raise WorkspaceError
+pub fn Workspace::resolved_operation(Self, String) -> Json raise WorkspaceError
+pub fn Workspace::revision(Self) -> Int32
+pub fn Workspace::update_documents(Self, Array[DocumentChange]) -> WorkspaceUpdate raise WorkspaceError
+pub fn Workspace::validate_request(Self, String, Request) -> Array[Violation] raise WorkspaceError
+pub fn Workspace::validate_response(Self, String, Response) -> Array[Violation] raise WorkspaceError
+
+pub(all) struct WorkspaceLimits {
+  documents : Int32
+  operations : Int32
+  depth : Int32
+  nodes : Int32
+  text_units : Int32
+  resolved_nodes : Int32
+  cases : Int32
+  findings : Int32
+} derive(Eq)
+pub fn WorkspaceLimits::default() -> Self
+pub fn WorkspaceLimits::equal(Self, Self) -> Bool
+pub fn WorkspaceLimits::not_equal(Self, Self) -> Bool
+
+pub struct WorkspaceUpdate {
+  // private fields
+}
+pub fn WorkspaceUpdate::changed_documents(Self) -> Array[String]
+pub fn WorkspaceUpdate::rebuilt_operations(Self) -> Array[String]
+pub fn WorkspaceUpdate::workspace(Self) -> Workspace
+
+// Type aliases
+
+// Traits

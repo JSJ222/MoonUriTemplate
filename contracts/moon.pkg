@@ -1,0 +1,6 @@
+import {
+  "JSJ222/moonuritemplate" @uri,
+  "moonbitstack/moonschema" @schema,
+  "moonbitlang/core/json",
+  "moonbitlang/core/string",
+}
