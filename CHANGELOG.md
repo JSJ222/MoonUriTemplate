@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- 契约工作区投影与消费者覆盖证据，含资源边界、回归测试及 `examples/contract_projection`。
+- CI 显式验证 moonc >= 0.10.16，并运行新增示例。
+
 ## 0.3.0 — 2026-10-22
 
 - Reposition around a separate `contracts` package for offline API contract workspaces; retain root URI API compatibility.

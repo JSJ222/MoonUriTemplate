@@ -41,6 +41,10 @@ jobs:
           git diff --exit-code
       - name: Formatting
         run: moon fmt --check
+      - name: Minimum compiler version
+        run: python tools/verify_toolchain.py
+      - name: Run extension scenario
+        run: moon run examples/contract_projection --target wasm-gc --deny-warn
       - name: Check all backends
         run: moon check --target all --deny-warn
       - name: Public interface drift

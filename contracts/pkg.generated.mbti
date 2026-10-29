@@ -52,6 +52,20 @@ pub(all) struct DocumentChange {
   document : Json?
 }
 
+pub struct OperationCoverage {
+  operation : String
+  positive_passes : Int32
+  negative_passes : Int32
+  failures : Int32
+  // private fields
+}
+pub fn OperationCoverage::failures(Self) -> Int32
+pub fn OperationCoverage::negative_passes(Self) -> Int32
+pub fn OperationCoverage::operation(Self) -> String
+pub fn OperationCoverage::positive_passes(Self) -> Int32
+pub fn OperationCoverage::to_json(Self) -> Json
+pub fn OperationCoverage::uncovered_responses(Self) -> Array[String]
+
 pub(all) enum ParameterLocation {
   Path
   Query
@@ -111,10 +125,12 @@ pub struct Workspace {
   // private fields
 }
 pub fn Workspace::compare(Self, Self) -> Array[ContractChange]
+pub fn Workspace::consumer_coverage(Self, Array[ConsumerCase]) -> Array[OperationCoverage] raise WorkspaceError
 pub fn Workspace::gate_upgrade(Self, Self, Array[ConsumerCase], approve_review? : Bool) -> UpgradeDecision raise WorkspaceError
 pub fn Workspace::manifest(Self) -> Json raise WorkspaceError
 pub fn Workspace::operation_names(Self) -> Array[String]
 pub fn Workspace::operations_using(Self, String) -> Array[String]
+pub fn Workspace::project_operations(Self, Array[String]) -> Self raise WorkspaceError
 pub fn Workspace::replay(Self, Array[ConsumerCase]) -> Array[CaseResult] raise WorkspaceError
 pub fn Workspace::request_path(Self, String, Request) -> String raise WorkspaceError
 pub fn Workspace::resolved_operation(Self, String) -> Json raise WorkspaceError

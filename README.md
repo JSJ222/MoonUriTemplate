@@ -124,3 +124,14 @@ let values : Array[(String, @uri_template.Value)] = [
 `TemplateCatalog::diff_catalog(next)` 列出新增、删除和变更端点，连字面量路径变化也保留；每项变更附原有变量/运算符契约报告。`inspect_requests` 检查混合请求的全部诊断，限制请求、绑定及结果数量，返回请求索引和变量名，不包含绑定值。缺失变量属于提示，普通 RFC 展开允许省略。
 
 `expand_requests` 现在先调用精确计量，再构造输出，确保总预算超限在生成 URI 数组前被拒绝。计量仍有输入编码的临时分配，展开需额外遍历一次。运行 `moon run examples/maintenance --target wasm-gc`。详见 [功能与边界](docs/OCTOBER_FEATURES.md)。
+
+## Source-workspace extensions (unreleased)
+
+Compiler requirement: **moonc >= 0.10.16**. See
+[the API, scope and complexity notes](docs/FEATURE_EXTENSIONS.md) for **契约工作区投影与消费者覆盖证据**.
+These additions are available in this source tree; the previously published package
+version does not yet contain them. Run the assertion-based example from the repository:
+
+```sh
+moon run examples/contract_projection --target wasm-gc --deny-warn
+```
