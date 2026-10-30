@@ -2,6 +2,17 @@
 
 从 0.3.0 开始，主能力是纯 MoonBit 的**离线 API 契约工作区**：锁定跨文档 Schema → 校验类型化请求/响应 → 原子更新文档 → 按传递依赖重建操作 → 对受影响消费者执行升级门禁。工作区可作为 SDK、Web 框架中间件、契约编辑器和 CI 的基础库，不绑定某个 HTTP 框架。原 RFC 6570 Level 4 接口保持兼容；不通过改名掩盖历史。
 
+## 0.4.0：操作子集投影与消费者覆盖证据
+
+- `Workspace::project_operations` 输出选中操作与传递资源依赖，保留源顺序，可导出 manifest 后独立编译，用于 SDK 和服务消费者的最小契约包。
+- `Workspace::consumer_coverage` 统计正/负例通过、失败及未覆盖响应规则，区分真正响应验证与仅请求测试，报告不含调用值。
+
+要求 **moonc >= 0.10.16**。投影不是授权或敏感字段清洗；响应规则覆盖也不证明所有 Schema 分支或批准升级。完整范围与预算见[功能文档](docs/FEATURE_EXTENSIONS.md)。
+
+```sh
+moon run examples/contract_projection --target wasm-gc --deny-warn
+```
+
 ## 0.3.0 核心能力与三个场景
 
 - **标准接入及双向边界校验**：支持明确限定的 OpenAPI 3.1 JSON 导入、四种位置的类型化参数、JSON 请求体、状态/媒体类型/声明响应头及响应体校验。复用 `moonbitstack/moonschema@0.2.0`，不再重复制造浅层 Schema 验证器。
@@ -39,7 +50,7 @@ API 客户端、MCP 资源客户端和服务端超媒体响应常需要把变量
 公开仓库：[JSJ222/MoonUriTemplate](https://github.com/JSJ222/MoonUriTemplate)。包命名空间为 `JSJ222/moonuritemplate`。
 
 ```sh
-moon add JSJ222/moonuritemplate@0.3.0
+moon add JSJ222/moonuritemplate@0.4.0
 ```
 
 在使用方的 `moon.pkg` 中配置导入：
@@ -124,14 +135,3 @@ let values : Array[(String, @uri_template.Value)] = [
 `TemplateCatalog::diff_catalog(next)` 列出新增、删除和变更端点，连字面量路径变化也保留；每项变更附原有变量/运算符契约报告。`inspect_requests` 检查混合请求的全部诊断，限制请求、绑定及结果数量，返回请求索引和变量名，不包含绑定值。缺失变量属于提示，普通 RFC 展开允许省略。
 
 `expand_requests` 现在先调用精确计量，再构造输出，确保总预算超限在生成 URI 数组前被拒绝。计量仍有输入编码的临时分配，展开需额外遍历一次。运行 `moon run examples/maintenance --target wasm-gc`。详见 [功能与边界](docs/OCTOBER_FEATURES.md)。
-
-## Source-workspace extensions (unreleased)
-
-Compiler requirement: **moonc >= 0.10.16**. See
-[the API, scope and complexity notes](docs/FEATURE_EXTENSIONS.md) for **契约工作区投影与消费者覆盖证据**.
-These additions are available in this source tree; the previously published package
-version does not yet contain them. Run the assertion-based example from the repository:
-
-```sh
-moon run examples/contract_projection --target wasm-gc --deny-warn
-```

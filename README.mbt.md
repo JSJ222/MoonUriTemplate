@@ -14,6 +14,18 @@ Only the documented profile is supported: typed decoded values, exact JSON media
 
 `python tools/compare_contract_oracle.py` compares 351 original fixtures with python-jsonschema 4.26.0 (Draft 2020-12). `moon run benchmarks/contract_management --target native --release` asserts cold/incremental equivalence and prints actual rebuild/replay counts and timing percentiles. See [API contracts](docs/API_CONTRACTS.md) for reproducibility and limitations.
 
+## New in 0.4.0
+
+- `Workspace::project_operations` exports an independently compilable operation subset with only its transitive resource lock.
+- `Workspace::consumer_coverage` reports positive/negative passes, failures and uncovered response rules across all operations, without copying request/response values into evidence.
+
+Requires **moonc >= 0.10.16**. Projection is not authorization or sensitive-field scrubbing; status-rule coverage is not a proof of complete schema coverage or upgrade approval. See [API and budgets](docs/FEATURE_EXTENSIONS.md).
+
+```sh
+moon add JSJ222/moonuritemplate@0.4.0
+moon run examples/contract_projection --target wasm-gc --deny-warn
+```
+
 ## Legacy URI package
 
 Current source adds runtime parameter contracts (`Template::with_contract`) and immutable incremental links (`TemplateCatalog::start_session`, `LinkSession::update`). See [runtime integrations](docs/RUNTIME_INTEGRATIONS.md) and the `contracts` / `incremental_links` examples. On affected Windows 0.10.16, use `./tools/windows/moon.ps1`; see [toolchain notes](docs/WINDOWS_TOOLCHAIN.md).
@@ -44,14 +56,3 @@ The runtime implementation is original. Apache-2.0 test fixtures from [uri-templ
 `TemplateCatalog::diff_catalog(next)` 列出新增、删除和变更端点，连字面量路径变化也保留；每项变更附原有变量/运算符契约报告。`inspect_requests` 检查混合请求的全部诊断，限制请求、绑定及结果数量，返回请求索引和变量名，不包含绑定值。缺失变量属于提示，普通 RFC 展开允许省略。
 
 `expand_requests` 现在先调用精确计量，再构造输出，确保总预算超限在生成 URI 数组前被拒绝。计量仍有输入编码的临时分配，展开需额外遍历一次。运行 `moon run examples/maintenance --target wasm-gc`。详见 [功能与边界](docs/OCTOBER_FEATURES.md)。
-
-## Source-workspace extensions (unreleased)
-
-Compiler requirement: **moonc >= 0.10.16**. See
-[the API, scope and complexity notes](docs/FEATURE_EXTENSIONS.md) for **契约工作区投影与消费者覆盖证据**.
-These additions are available in this source tree; the previously published package
-version does not yet contain them. Run the assertion-based example from the repository:
-
-```sh
-moon run examples/contract_projection --target wasm-gc --deny-warn
-```
